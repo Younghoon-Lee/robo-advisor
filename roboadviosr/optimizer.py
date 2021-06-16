@@ -4,7 +4,7 @@ import time
 from itertools import combinations
 from operator import itemgetter
 from pandas_datareader import data as web
-from pypfopt import risk_models
+from pypfopt import objective_functions, risk_models
 from pypfopt import expected_returns
 from pypfopt.efficient_frontier import EfficientFrontier
 from datetime import datetime, timedelta
@@ -86,7 +86,8 @@ class PortfolioOptimizer:
             filtered_df = df[assets].copy()
             return_matrix = expected_returns.mean_historical_return(
                 filtered_df)
-            cov_matrix = risk_models.CovarianceShrinkage(df).ledoit_wolf()
+            cov_matrix = risk_models.CovarianceShrinkage(
+                filtered_df).ledoit_wolf()
             self.num_assets = len(assets)
             self.sim_packages.append([assets, cov_matrix, return_matrix])
 
@@ -94,9 +95,57 @@ class PortfolioOptimizer:
         print("---")
         print("Time to fetch data: %.2f seconds" % (time.time() - start))
 
+    def get_optimal_portfolio(self):
+
+        start = time.time()
+        self.portfolio_list = []
+        sim_packages = self.sim_packages.copy()
+        self.combos_error = []
+        for _ in range(len(sim_packages)):
+
+            sim = sim_packages.pop()
+            return_model = sim[2]
+            risk_model = sim[1]
+            assets = sim[0]
+            ef = EfficientFrontier(
+                return_model, risk_model, weight_bounds=(0, 1))
+            ef.add_objective(objective_functions.L2_reg, gamma=1)
+            try:
+                port = ef.efficient_return(0.2)
+                weights = []
+                for i in range(len(port)):
+                    weights.append(round(port[assets[i]], 4))
+                markowitz_portfolio = list(zip(assets, weights))
+                portfolio_stats = ef.portfolio_performance()
+                self.portfolio_list.append([weights, markowitz_portfolio, round(
+                    portfolio_stats[0]*100, 4), round(portfolio_stats[1]*100, 4), round(portfolio_stats[2], 4)])
+            except:
+                self.combos_error.append(sim)
+            self.portfolio_list = sorted(
+                self.portfolio_list, key=itemgetter(4), reverse=True)
+
+        self.best_sharpe_portfolio = self.portfolio_list[0]
+        temp = self.best_sharpe_portfolio
+        print('---')
+        print('Time to optimize portfolio: %.2f seconds' %
+              (time.time() - start))
+
+        print('-----------------------------------------------')
+        print('----- Portfolio Optimized for Sharpe Ratio ----')
+        print('-----------------------------------------------')
+        print('')
+        print(*temp[1], sep='\n')
+        print('')
+        print('Optimal Portfolio Return: {}%'.format(temp[2]))
+        print('Optimal Portfolio Volatility: {}%'.format(temp[3]))
+        print('Optimal Portfolio Sharpe Ratio: {}'.format(temp[4]))
+        print('')
+        print('')
+
 
 if __name__ == "__main__":
     assets = ['252670.KS', '091220.KS', '114800.KS', '122630.KS', '251340.KS',
               '233740.KS', '252710.KS', '214980.KS']
     test = PortfolioOptimizer(assets)
     test.fetch_data()
+    test.get_optimal_portfolio()
