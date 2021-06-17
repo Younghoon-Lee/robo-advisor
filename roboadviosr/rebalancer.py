@@ -114,14 +114,28 @@ class RebalancingSimulator:
                 num_units = allocated_capital//(start_price*(1+trade_cost))
                 cash_used = num_units*start_price*trade_cost
                 self.starting_residual_cash = self.starting_residual_cash-cash_used
-                self.starting_residual_cash = round(
-                    self.starting_residual_cash, 4)
+                self.starting_residual_cash = math.floor(
+                    self.starting_residual_cash*1000)/1000
 
             portfolio_init.append((starting_vals[i][0], num_units))
 
         self.starting_unit_holdings = [x[1] for x in portfolio_init]
         self.initialize_portfolio_ = portfolio_init
         return
+
+    def run_simulation(self, plot=False):
+
+        start = time.time()
+        self.total_trades = 0
+        portfolio_values = []
+        weight_history = []
+        unit_history = []
+        cash_history = []
+        trade_history = []
+
+        price_simulation = None
+        self.current_unit_holdings = self.starting_unit_holdings
+        self.sim_cash_balance = self.starting_residual_cash
 
 
 if __name__ == "__main__":
