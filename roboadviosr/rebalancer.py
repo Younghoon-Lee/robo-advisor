@@ -150,6 +150,8 @@ class RebalancingSimulator:
 
             print("{} 포트폴리오 평가 금액: {}".format(
                 self.current_trade_day, port_val))
+            print("{} 포트폴리오 자산 비중 현황: {}".format(
+                self.current_trade_day, list(zip(self.asset_list, new_weights))))
 
             portfolio_values.append(port_val)
             weight_history.append(new_weights)
