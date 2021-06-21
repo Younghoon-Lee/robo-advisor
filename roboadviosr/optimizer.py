@@ -101,6 +101,10 @@ class PortfolioOptimizer:
         self.portfolio_list = []
         sim_packages = self.sim_packages.copy()
         self.combos_error = []
+        sector_mapper = {"252670.KS": "low", "091220.KS": "low", "114800.KS": "low", "233740.KS": "low",
+                         "252710.KS": "low", "251340.KS": "low", "214980.KS": "high", "122630.KS": "high"}
+        sector_lowest = {"high": 0.1}
+        sector_highest = {"high": 0.4}
         for _ in range(len(sim_packages)):
 
             sim = sim_packages.pop()
@@ -110,8 +114,11 @@ class PortfolioOptimizer:
             ef = EfficientFrontier(
                 return_model, risk_model, weight_bounds=(0, 1))
             ef.add_objective(objective_functions.L2_reg, gamma=1)
+            ef.add_sector_constraints(
+                sector_mapper=sector_mapper, sector_lower=sector_lowest, sector_upper=sector_highest)
             try:
                 port = ef.efficient_return(0.2)
+                port = ef.clean_weights()
                 weights = []
                 for i in range(len(port)):
                     weights.append(round(port[assets[i]], 4))
