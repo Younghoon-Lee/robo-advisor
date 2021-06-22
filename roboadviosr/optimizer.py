@@ -3,6 +3,7 @@ import pandas as pd
 import time
 from itertools import combinations
 from operator import itemgetter
+from pykrx import stock
 from pandas_datareader import data as web
 from pypfopt import objective_functions, risk_models
 from pypfopt import expected_returns
@@ -24,6 +25,8 @@ class PortfolioOptimizer:
         self.num_assets = portfolio_size
         self.risk_tolerance = risk_tolerance
         self.sim_iterations = 2500
+        self.fetch_data()
+        self.get_optimal_portfolio()
 
     def fetch_data(self):
 
@@ -36,30 +39,31 @@ class PortfolioOptimizer:
         self.asset_combo_list = []
 
         stock_start_date = (
-            datetime.today()-timedelta(weeks=78)).strftime("%Y-%m-%d")
+            datetime.today()-timedelta(weeks=52)).strftime("%Y%m%d")
+        stock_end_date = datetime.today().strftime("%Y%m%d")
         df = pd.DataFrame()
         column_names = []
 
         for asset in self.asset_basket:
             if (count == 0):
                 try:
-                    df = web.DataReader(asset, data_source='yahoo', start=stock_start_date)[
-                        'Adj Close']
+                    df = stock.get_etf_ohlcv_by_date(stock_start_date, stock_end_date, asset)[
+                        'NAV']
                     df = df.to_frame()
                     column_names.append(asset)
                     count += 1
                 except Exception as e:
-                    print('fetching data error : ', e)
+                    print('fetching data error : {}'.format(asset), e)
                     self.assets_errors.append(asset)
             else:
                 try:
-                    temp = web.DataReader(asset, data_source='yahoo', start=stock_start_date)[
-                        'Adj Close']
+                    temp = stock.get_etf_ohlcv_by_date(stock_start_date, stock_end_date, asset)[
+                        'NAV']
                     column_names.append(asset)
                     df = pd.merge(df, temp, how='outer',
                                   left_index=True, right_index=True)
                 except Exception as e:
-                    print('fetching data error : ', e)
+                    print('fetching data error : {}'.format(asset), e)
                     self.assets_errors.append(asset)
 
         # df = df.dropna(axis=0)
@@ -114,10 +118,10 @@ class PortfolioOptimizer:
             ef = EfficientFrontier(
                 return_model, risk_model, weight_bounds=(0, 1))
             ef.add_objective(objective_functions.L2_reg, gamma=1)
-            ef.add_sector_constraints(
-                sector_mapper=sector_mapper, sector_lower=sector_lowest, sector_upper=sector_highest)
+            # ef.add_sector_constraints(
+            #     sector_mapper=sector_mapper, sector_lower=sector_lowest, sector_upper=sector_highest)
             try:
-                port = ef.efficient_return(0.2)
+                port = ef.max_sharpe()
                 port = ef.clean_weights()
                 weights = []
                 for i in range(len(port)):
@@ -151,8 +155,8 @@ class PortfolioOptimizer:
 
 
 if __name__ == "__main__":
-    assets = ['252670.KS', '091220.KS', '114800.KS', '122630.KS', '251340.KS',
-              '233740.KS', '252710.KS', '214980.KS']
+    assets = ['069500', '091170', '130730', '229200', '139270', '305720', '228800', '144600', '102110', '139220', '117700',
+              '214980', '130680', '305540', '261220', '139230', '219390', '278540', '292150', '272560', '091180', '228790']
     test = PortfolioOptimizer(assets)
     test.fetch_data()
     test.get_optimal_portfolio()

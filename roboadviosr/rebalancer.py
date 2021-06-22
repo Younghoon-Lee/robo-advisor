@@ -6,6 +6,7 @@ import pandas as pd
 from pandas_datareader import data as web
 from datetime import datetime, timedelta
 import math
+from pykrx import stock
 
 
 class RebalancingSimulator:
@@ -19,6 +20,8 @@ class RebalancingSimulator:
         self.frac_units = frac_units
         self.starting_portfolio_value = starting_cash
         self.back_test = back_test
+        self.data_prep()
+        self.initialize_portfolio()
 
     def data_prep(self):
 
@@ -57,17 +60,18 @@ class RebalancingSimulator:
         else:
             df = pd.DataFrame()
             stock_start_date = (
-                datetime.today()-timedelta(weeks=52)).strftime("%Y-%m-%d")
+                datetime.today()-timedelta(weeks=52)).strftime("%Y%m%d")
+            stock_end_date = datetime.today().strftime("%Y%m%d")
             count = 0
             for asset in asset_list:
                 if (count == 0):
-                    df = web.DataReader(asset, data_source='yahoo', start=stock_start_date)[
-                        'Adj Close']
+                    df = stock.get_etf_ohlcv_by_date(stock_start_date, stock_end_date, asset)[
+                        '종가']
                     df = df.to_frame()
                     count += 1
                 else:
-                    temp = web.DataReader(asset, data_source='yahoo', start=stock_start_date)[
-                        'Adj Close']
+                    temp = stock.get_etf_ohlcv_by_date(stock_start_date, stock_end_date, asset)[
+                        '종가']
                     df = pd.merge(df, temp, how='outer',
                                   left_index=True, right_index=True)
 

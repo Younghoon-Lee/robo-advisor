@@ -5,14 +5,29 @@ import os
 from datetime import datetime, timedelta
 from pykrx import stock
 
-ticker_list = stock.get_etf_ticker_list("20200622")
+ticker_list = stock.get_etf_ticker_list("20200603")
 dirpath = os.path.dirname(__file__)
 test = pd.read_csv(
     "/Users/tickle/tickle/robo-advisor/test/etf.csv", encoding='CP949')
-df = test[['종목코드', '종목명', '거래량']]
+df = test[['종목코드', '종목명', '종가', '거래량']]
 df = df.sort_values(by='거래량', ascending=False)
 df2 = df[df['종목명'].str.contains('인버스') == False]
 df3 = df2[df2['종목명'].str.contains('레버리지') == False]
+df3 = df3[df3['거래량'] >= 50000]
+print(df3)
+df3 = df3['종목코드'].to_list()
+df3 = list(map(str, df3))
+print(len(df3))
+target_etf = []
+for i in range(len(df3)):
+    if len(df3[i]) == 5:
+        df3[i] = "0" + df3[i]
+    if df3[i] in ticker_list:
+        target_etf.append(df3[i])
+print(len(target_etf))
+temp = list(map(int, target_etf))
+print(df[df['종목코드'].isin(temp)].tail(30))
+'''
 etf = df3.head(30)
 etf = etf['종목코드'].tolist()
 etf = list(map(str, etf))
@@ -55,3 +70,4 @@ for asset in target_etf:
 
 df.columns = column_names
 print(df)
+'''
