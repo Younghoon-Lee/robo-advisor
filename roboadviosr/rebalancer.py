@@ -105,12 +105,14 @@ class RebalancingSimulator:
         trade_cost = self.trade_cost
         portfolio_init = []
         self.starting_residual_cash = self.starting_portfolio_value
+        start_prices = []
 
         for i in range(len(starting_vals)):
 
             allocated_capital = round(
                 starting_vals[i][4]*self.starting_portfolio_value, 4)
             start_price = starting_vals[i][1]
+            start_prices.append(start_price)
 
             if (self.frac_units == True):
                 pass
@@ -125,6 +127,9 @@ class RebalancingSimulator:
 
         self.starting_unit_holdings = [x[1] for x in portfolio_init]
         self.initialize_portfolio_ = portfolio_init
+        self.starting_weights = [(x*y)/self.starting_portfolio_value for x,
+                                 y in zip(self.starting_unit_holdings, start_prices)]
+        print(self.starting_weights)
         return
 
     def run_simulation(self, plot=False):
@@ -140,11 +145,13 @@ class RebalancingSimulator:
         unit_history = []
         cash_history = []
         trade_history = []
+        date_history = []
 
         price_simulation = None
         self.current_unit_holdings = self.starting_unit_holdings
         self.sim_cash_balance = self.starting_residual_cash
         df = self.back_test_stock_data
+        self.rebalancing_counter = 1
 
         for i in range(1, len(df)):
 
@@ -152,16 +159,31 @@ class RebalancingSimulator:
             self.current_trade_day = df.iloc[i].name
             port_val, new_weights, weight_diffs, new_target_vals, unit_holdings, trade_count = self.get_portfolio_values()
 
-            print("{} 포트폴리오 평가 금액: {}".format(
-                self.current_trade_day, port_val))
-            print("{} 포트폴리오 자산 비중 현황: {}".format(
-                self.current_trade_day, list(zip(self.asset_list, new_weights))))
+            # print("{} 포트폴리오 평가 금액: {}".format(
+            #     self.current_trade_day, port_val))
+            # print("{} 포트폴리오 자산 비중 현황: {}".format(
+            #     self.current_trade_day, list(zip(self.asset_list, new_weights))))
 
+            date_history.append(self.current_trade_day)
             portfolio_values.append(port_val)
             weight_history.append(new_weights)
             unit_history.append(unit_holdings)
             cash_history.append(self.sim_cash_balance)
             trade_history.append(trade_count)
+            self.rebalancing_counter += 1
+
+        # save backtest dataframe to csv file
+        backtest_dict = {'date': date_history, 'portValue': portfolio_values}
+        for i in range(len(self.asset_list)):
+            backtest_dict[self.asset_list[i]] = [x[i] for x in weight_history]
+
+        backtest = pd.DataFrame(backtest_dict)
+        if self.optimal_portfolio.risk_tolerance == 4:
+            backtest.to_csv("backtest.csv")
+        elif self.optimal_portfolio.risk_tolerance == 3:
+            backtest.to_csv("backtest2.csv")
+        else:
+            backtest.to_csv("backtest3.csv")
 
         self.sim_port_vals = portfolio_values
         self.sim_weight_vals = weight_history
@@ -230,7 +252,8 @@ class RebalancingSimulator:
         frac_units = self.frac_units
         target_weights = self.target_weights
         trade_cost = self.trade_cost
-        regular_rebalancing_day = ['2021-05-13']
+        # regular_rebalancing_day = ['2020-09-24 00:00:00',
+        #                            '2020-12-24 00:00:00', '2021-03-24 00:00:00']
 
         port_val = sum(x * y for x, y in zip(unit_holdings,
                        unit_prices)) + self.sim_cash_balance
@@ -243,7 +266,7 @@ class RebalancingSimulator:
         thresh_low = self.thresh_low
         trade_count = 0
 
-        if self.current_trade_day in regular_rebalancing_day:
+        if self.rebalancing_counter == 69:
 
             self.before_weights = new_weights
             print("{} 정기 리밸런싱".format(self.current_trade_day))
@@ -251,10 +274,10 @@ class RebalancingSimulator:
             # selling
             for i in range(len(new_weights)):
 
-                if target_weights[i] != new_weights[i] and new_weights[i] > target_weights[i]:
+                if new_weights[i] > target_weights[i]:
 
                     target_sell = (
-                        unit_prices[i]*unit_holdings[i]) - new_target_vals
+                        unit_prices[i]*unit_holdings[i]) - new_target_vals[i]
 
                     if frac_units == False:
 
@@ -262,6 +285,8 @@ class RebalancingSimulator:
                             allowable_units = (target_sell//unit_prices[i])
                             unit_holdings[i] = unit_holdings[i] - \
                                 allowable_units
+                            print("{}: {}주 매도".format(
+                                self.asset_list[i], allowable_units))
                             self.sim_cash_balance = self.sim_cash_balance + \
                                 (allowable_units*unit_prices[i]*(1-trade_cost))
                             trade_count += 1
@@ -271,26 +296,31 @@ class RebalancingSimulator:
             # buying
             for i in range(len(new_weights)):
 
-                if target_weights[i] != new_weights[i] and new_weights < target_weights[i]:
+                if (new_weights[i] < target_weights[i]):
 
                     target_buy = new_target_vals[i] - \
-                        (unit_prices * unit_holdings[i])
+                        (unit_prices[i] * unit_holdings[i])
 
                     if frac_units == False:
 
                         if self.sim_cash_balance >= (target_buy * (1 + trade_cost)):
                             allowable_units = target_buy//(
                                 unit_prices[i] * (1 + trade_cost))
-                            unit_holdings[i] = unit_holdings[i] + \
-                                allowable_units
-                            self.sim_cash_balance = self.sim_cash_balance - \
-                                allowable_units*unit_prices[i]*(1+trade_cost)
-                            trade_count += 1
+                            if allowable_units >= 1:
+                                unit_holdings[i] = unit_holdings[i] + \
+                                    allowable_units
+                                print("{}: {}주 매수".format(
+                                    self.asset_list[i], allowable_units))
+                                self.sim_cash_balance = self.sim_cash_balance - \
+                                    allowable_units * \
+                                    unit_prices[i]*(1+trade_cost)
+                                trade_count += 1
                     else:
                         pass
 
-        self.current_unit_holdings = unit_holdings
+            self.rebalancing_counter = 0
 
+        self.current_unit_holdings = unit_holdings
         return port_val, new_weights, weight_diffs, new_target_vals, unit_holdings, trade_count
 
 

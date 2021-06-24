@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 class PortfolioOptimizer:
 
-    def __init__(self, assets, risk_tolerance=5.0, portfolio_size=5, max_iters=None, print_init=True, max_pos=1.0, min_pos=0.0):
+    def __init__(self, assets, risk_tolerance=5.0, portfolio_size=5, max_iters=None, print_init=True, max_pos=0.5, min_pos=0.0):
 
         self.max_pos = max_pos
         self.min_pos = min_pos
@@ -88,7 +88,7 @@ class PortfolioOptimizer:
         for i in range(self.max_iters):
             assets = list(self.assets_combos[i])
             filtered_df = df[assets].copy()
-            return_matrix = expected_returns.mean_historical_return(
+            return_matrix = expected_returns.capm_return(
                 filtered_df)
             cov_matrix = risk_models.CovarianceShrinkage(
                 filtered_df).ledoit_wolf()
@@ -113,8 +113,19 @@ class PortfolioOptimizer:
         for asset in self.asset_basket:
             sector_mapper[asset] = universe[universe["ISIN"]
                                             == asset]["위험자산여부"].values[0]
-        sector_lower = {"Y": 0.0, "N": 0.0}
-        sector_upper = {"Y": 0.6, "N": 0.4}
+
+        if self.risk_tolerance == 4:
+            sector_lower = {"Y": 0.0}
+            sector_upper = {"Y": 0.7}
+        elif self.risk_tolerance == 3:
+            sector_lower = {"Y": 0.0}
+            sector_upper = {"Y": 0.55}
+        elif self.risk_tolerance == 2:
+            sector_lower = {"Y": 0.0}
+            sector_upper = {"Y": 0.35}
+        else:
+            print("invalid risk_tolerance")
+            return
 
         for _ in range(len(sim_packages)):
 
@@ -123,12 +134,15 @@ class PortfolioOptimizer:
             risk_model = sim[1]
             assets = sim[0]
             ef = EfficientFrontier(
-                return_model, risk_model, weight_bounds=(0, 1))
+                return_model, risk_model, weight_bounds=(self.min_pos, self.max_pos))
             ef.add_objective(objective_functions.L2_reg, gamma=1)
             ef.add_sector_constraints(
                 sector_mapper=sector_mapper, sector_lower=sector_lower, sector_upper=sector_upper)
             try:
-                port = ef.efficient_return(0.2)
+                if self.risk_tolerance == 2:
+                    port = ef.efficient_return(0.1)
+                else:
+                    port = ef.max_sharpe()
                 port = ef.clean_weights()
                 weights = []
                 for i in range(len(port)):
@@ -165,5 +179,3 @@ if __name__ == "__main__":
     assets = ['069500', '091170', '130730', '229200', '139270', '305720', '228800', '144600', '102110', '139220', '117700',
               '214980', '130680', '305540', '261220', '139230', '219390', '278540', '292150', '272560', '091180', '228790']
     test = PortfolioOptimizer(assets)
-    test.fetch_data()
-    test.get_optimal_portfolio()
