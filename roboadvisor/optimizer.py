@@ -1,14 +1,12 @@
-import numpy as np
 import pandas as pd
 import time
 from itertools import combinations
 from operator import itemgetter
-from pykrx import stock
-from pandas_datareader import data as web
 from pypfopt import objective_functions, risk_models
 from pypfopt import expected_returns
 from pypfopt.efficient_frontier import EfficientFrontier
 from datetime import datetime, timedelta
+from src.stock_data_collector import StockDataCollector
 
 
 class PortfolioOptimizer:
@@ -39,15 +37,15 @@ class PortfolioOptimizer:
         self.asset_combo_list = []
 
         stock_start_date = (
-            datetime.today()-timedelta(weeks=52)).strftime("%Y%m%d")
-        stock_end_date = datetime.today().strftime("%Y%m%d")
+            datetime.today()-timedelta(weeks=52)).strftime("%Y-%m-%d")
+        stock_end_date = datetime.today().strftime("%Y-%m-%d")
         df = pd.DataFrame()
         column_names = []
 
         for asset in self.asset_basket:
             if (count == 0):
                 try:
-                    df = stock.get_etf_ohlcv_by_date(stock_start_date, stock_end_date, asset)[
+                    df = StockDataCollector().get_historical_data(stock_start_date, stock_end_date, asset)[
                         'NAV']
                     df = df.to_frame()
                     column_names.append(asset)
@@ -57,7 +55,7 @@ class PortfolioOptimizer:
                     self.assets_errors.append(asset)
             else:
                 try:
-                    temp = stock.get_etf_ohlcv_by_date(stock_start_date, stock_end_date, asset)[
+                    temp = StockDataCollector().get_historical_data(stock_start_date, stock_end_date, asset)[
                         'NAV']
                     column_names.append(asset)
                     df = pd.merge(df, temp, how='outer',

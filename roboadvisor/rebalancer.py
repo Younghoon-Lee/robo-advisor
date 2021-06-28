@@ -3,10 +3,9 @@ import matplotlib.pyplot as plt
 import time
 import statistics
 import pandas as pd
-from pandas_datareader import data as web
 from datetime import datetime, timedelta
 import math
-from pykrx import stock
+from src.stock_data_collector import StockDataCollector
 
 
 class RebalancingSimulator:
@@ -60,17 +59,17 @@ class RebalancingSimulator:
         else:
             df = pd.DataFrame()
             stock_start_date = (
-                datetime.today()-timedelta(weeks=52)).strftime("%Y%m%d")
-            stock_end_date = datetime.today().strftime("%Y%m%d")
+                datetime.today()-timedelta(weeks=52)).strftime("%Y-%m-%d")
+            stock_end_date = datetime.today().strftime("%Y-%m-%d")
             count = 0
             for asset in asset_list:
                 if (count == 0):
-                    df = stock.get_etf_ohlcv_by_date(stock_start_date, stock_end_date, asset)[
+                    df = StockDataCollector().get_historical_data(stock_start_date, stock_end_date, asset)[
                         '종가']
                     df = df.to_frame()
                     count += 1
                 else:
-                    temp = stock.get_etf_ohlcv_by_date(stock_start_date, stock_end_date, asset)[
+                    temp = StockDataCollector().get_historical_data(stock_start_date, stock_end_date, asset)[
                         '종가']
                     df = pd.merge(df, temp, how='outer',
                                   left_index=True, right_index=True)
