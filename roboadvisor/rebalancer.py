@@ -128,7 +128,13 @@ class RebalancingSimulator:
         self.initialize_portfolio_ = portfolio_init
         self.starting_weights = [(x*y)/self.starting_portfolio_value for x,
                                  y in zip(self.starting_unit_holdings, start_prices)]
-        print(self.starting_weights)
+
+        print("Initialize your porfolio as follow")
+        for init in portfolio_init:
+            print("{}: {}".format(init[0], init[1]))
+        print("your portfolio weights: ", list(
+            zip(self.asset_list, self.starting_weights)))
+
         return
 
     def run_simulation(self, plot=False):

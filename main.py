@@ -12,4 +12,4 @@ optimizer = PortfolioOptimizer(assets, risk_tolerance=2)
 rebalancer = RebalancingSimulator(
     optimizer, back_test=False, starting_cash=5000000)
 
-rebalancer.run_simulation()
+# rebalancer.run_simulation()
