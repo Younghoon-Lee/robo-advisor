@@ -1,0 +1,1140 @@
+/* Normalize */
+html,
+body {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+}
+
+body {
+    font-family: "Spoqa Han Sans", "Spoqa Han Sans JP";
+}
+
+a, a:hover, a:active, a:visited, a:focus {
+    text-decoration:none;
+}
+
+.btn.focus {
+    box-shadow: none;
+}
+
+/* 기본 컨테이너 */
+.page {
+    display: flex;
+    flex: 1;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: space-between; 
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* footer 제외한 content 부분 */
+.contentWrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 16px 20px 16px 20px;
+}
+
+/* 신한 copyright있는 footer 부분 */
+.poweredByShinhanContainer {
+    /* height: 80px; */
+    height: auto;
+    padding-top: 17px;
+    padding-bottom: 33px;
+    background-color: #f8f8f8;
+}
+
+.poweredByShinhanContainer .firstParagraph {
+    margin-bottom: 5px;
+}
+
+.shinhanLogo {
+    width: 56px;
+    height: 11px;
+    object-fit: contain;
+}
+
+/* 페이지 타이틀 제목 */
+.pageTitle {
+    margin-bottom: 24px;
+}
+.pageTitleWithDescription {
+    margin-bottom: 32px;
+}
+.pageTitle p, 
+.pageTitleWithDescription p:not(:first-child) {
+    margin: 0;
+}
+
+/* 설명란 조그만한 동그라미 (점) */
+.oval {
+    width: 4px;
+    height: 4px;
+    background-color: #979797;
+    border-radius: 50%;
+    margin-top: 10px;
+    max-width: 4px;
+    max-height: 4px;
+    min-width: 4px;
+    min-height: 4px;
+}
+
+/* font */
+.bold {
+    font-weight: bold;
+}
+.title3 {
+    font-size: 21px;
+}
+.title2 {
+    font-size: 24px;
+}
+.large {
+    font-size: 18px;
+}
+.regular {
+    font-size: 15px;
+}
+.small {
+    font-size: 12px;
+}
+.micro {
+    font-size: 9px;
+}
+.tickle100 {
+    color: #ff9016;
+}
+.back100 {
+    color: #000000;
+}
+.back90 {
+    color: #444444;
+}
+.back80 {
+    color: #979797;
+}
+/* space */
+.marginBottomLarge {
+    margin-bottom: 48px;
+}
+.marginBottomBase {
+    margin-bottom: 24px;
+}
+.marginTopBase {
+    margin-top: 24px;
+}
+.marginBottomSmall {
+    margin-bottom: 16px;
+}
+.marginBottomTiny {
+    margin-bottom: 8px;
+}
+.marginBottomNone {
+    margin-bottom: 0px;
+}
+.marginRightSmall {
+    margin-right: 16px;
+}
+.marginLeftSmall {
+    margin-left: 16px;
+}
+.marginRightTiny {
+    margin-right: 8px;
+}
+
+
+
+/* SquareButton */
+.squareButton {
+    width: 100%;
+    height: 50px;
+    border: 0;
+    background-color: #ff9016;
+    border-radius: 10px;
+    align-self: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    transition: opacity 0.08s ease-in-out;
+}
+
+.squareButton.disabled {
+    color: #c3c3c3;
+    background-color: rgb(233, 233, 233);
+}
+
+.squareButton:focus {
+    outline: none;
+}
+
+.squareButton:not(.disabled):active {
+    opacity: 0.7;
+}
+
+.squareButton.outline {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #ff9016;
+    background-color: #ffffff;
+    border-radius: 10px;
+    align-self: center;
+    justify-content: center;
+    color: #ff9016;
+    font-size: 15px;
+    font-weight: bold;
+    transition: opacity 0.08s ease-in-out;
+}
+
+/* Border Button (Radio) */
+.borderButton.focus, .borderButton.active {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    background-color: #fff7ee;
+    border: 1px solid #ff9016;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    color: #ff9016 !important;
+    font-size: 15px !important;
+    font-weight: bold;
+    transition: opacity 0.08s ease-in-out;
+
+}
+.borderButton {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    background-color: #ffffff;
+    border: 1px solid #e9e9e9;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    color: #979797 !important;;
+    font-size: 15px !important;
+    font-weight: normal;
+    transition: opacity 0.08s ease-in-out;
+}
+.borderButton:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.borderButton:active {
+    opacity: 0.7;
+}
+
+
+
+
+/* TextField */
+.textFieldWithLabel {
+    margin-bottom: 24px;
+}
+
+.textFieldWithLabel label {
+    font-size: 12px;
+    color: #444444;
+}
+
+.textField {
+    border-radius: 10px;
+    border: 0.5px solid #c3c3c3;
+    height: 50px;
+}
+
+.textField::placeholder {
+    color: #979797;
+}
+
+.textField:focus {
+    border: 1px solid #ff9016;
+    box-shadow: none;
+}
+
+.textField.disabled {
+    color: #979797;
+    -webkit-text-fill-color: #979797;
+    opacity: 1! important;
+    background-color: #f8f8f8;
+}
+
+/* Dropdowns(select box) */
+.select {
+    width: 100% !important;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+}
+.option {
+
+}
+
+.btn.dropdown-toggle.btn-light:active,
+.btn.dropdown-toggle.btn-light:focus,
+.btn.dropdown-toggle.btn-light:hover {
+    background-color: #ffffff !important;
+    border: 1px solid #ff9016 !important;
+    outline: none !important;
+    outline-offset: 0px;
+    box-shadow: none;
+}
+
+.dropdown button {
+    width: 100%;
+    border-radius: 10px;
+    border: 0.5px solid #c3c3c3;
+    height: 50px;
+    background-color: #ffffff;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .375rem .75rem;
+}
+
+.dropdown-menu {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.dropdown-item {
+    padding: 12px;
+    color: #979797 !important;
+    font-size: 15px;
+}
+
+.dropdown-item.selected {
+    background-color: #fff7ee;
+    border-radius: 10px;
+    color: #ff9016 !important;
+    font-weight: bold;
+}
+
+
+
+/* Checkbox styling */
+/* Custom Checkbox Button */
+.checkboxContainer, 
+.integratedMarginCheckboxContainer {
+    display: block;
+    position: relative;
+    padding-left: 34px;
+    cursor: pointer;
+    font-size: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-bottom: 0px;
+  }
+  
+  /* Hide the browser's default checkbox */
+  .checkboxContainer input,
+  .integratedMarginCheckboxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+/* Create a custom checkbox */
+.checkbox,
+.integratedMarginCheckbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #c3c3c3;
+    border-radius: 2px;
+  }
+  
+  /* When the checkbox is checked, add a background color */
+  .checkboxContainer input:checked ~ .checkbox,
+  .integratedMarginCheckboxContainer input:checked ~ .integratedMarginCheckbox {
+    background-color: #ff9016;
+    border: 0;
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkbox:after,
+  .integratedMarginCheckbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark when checked */
+
+
+  
+  /* Style the checkmark/indicator */
+   /* Unchecked */
+   .checkboxContainer input ~ .checkbox:after,
+   .integratedMarginCheckboxContainer input ~ .integratedMarginCheckbox:after {
+     display: block;
+   }
+
+   .checkboxContainer input + .checkbox:after,
+   .integratedMarginCheckboxContainer input ~ .integratedMarginCheckbox:after  {
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid #e9e9e9;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  /* Checked */
+  .checkboxContainer input:checked ~ .checkbox:after,
+  .integratedMarginCheckboxContainer input:checked ~ .integratedMarginCheckbox:after {
+      display: block;
+  }
+
+  .checkboxContainer input:checked + .checkbox:after,
+  .integratedMarginCheckboxContainer input:checked + .integratedMarginCheckbox:after {
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+ 
+  /* End of Checkbox styling */
+
+
+
+  /* PopUp Styling */
+  .modal .popup {
+    width: 73%;
+    border-radius: 10px;
+    background-color: white;
+    margin: 0 auto;
+    position: relative;
+    top: 40%;
+  }
+  
+  .modal .title {
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .modal .content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .modal .button-wrapper {
+    display: flex;
+    flex-direction: row;
+    border-top: 0.5px solid #e9e9e9;
+    justify-content: center;
+  }
+  
+  .modal .button {
+    flex: 1;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    color: #ff9016;
+    background-color: white;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  
+  .modal .button:focus {
+    outline: none;
+    outline-offset: none;
+  }
+  /* 통합증거금 selectbox */
+  .currencySelect .filter-option {
+    font-size: 15px;
+}
+
+.inner.show {
+    margin-left: 4px;
+    margin-right: 4px !important;
+}
+
+
+
+
+/* *********************** */
+/* ** basic_information ** */
+/* *********************** */
+
+/* input_id_number */
+.label {
+    margin-bottom: 8px;
+}
+
+.idNumberFront {
+    margin-right: 8px;
+}
+
+.idNumberBehind {
+    border-width: 1px
+}
+
+/* input_address */
+.findZipcodeButton {
+    height: 50px;
+    border: 0.5px solid #c3c3c3;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #444444;
+    font-size: 15px;
+    align-self: center;
+    justify-content: center;
+    box-shadow: 1px 1px 1px 0 rgba(0, 0, 0, 0.12);
+
+    margin-left: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    word-break: keep-all;
+}
+
+.findZipcodeButton:focus {
+    outline: none;
+}
+
+.findZipcodeButton:active {
+    opacity: 0.7;
+}
+
+
+.addressFirst, .addressSecond, .addressThird, 
+#idNumberFirst, #idNumberFirst::placeholder {
+    color: #979797 !important;
+}
+
+.addressFirstLine, .addressSecondLine{
+    margin-bottom: 8px;
+}
+
+
+/* BottomSheet Styling */
+.bottomSheetContent {
+    position:absolute;
+    bottom: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: #ffffff;
+    height: calc(100% - 24px);
+    width: 100%;
+    padding-bottom: 34px;
+}
+  
+.closeIconImage {
+    width: 24px;
+    height: 24px;
+}
+
+.bottomSheetTopPart {
+    border-bottom: 0.5px solid #e9e9e9;
+    padding-top: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.bottomSheetTopPartWithNoBorder {
+    border: none;
+}
+
+.bottomSheetBottomPart {
+    background-color: #ffffff;
+    height: 85%;
+}
+
+.addressItem {
+    border-bottom: 0.5px solid #e9e9e9;
+    padding: 16px 20px 16px 20px;
+}
+
+.addressItemBorderTop {
+    border-bottom: none;
+    border-top: 0.5px solid #e9e9e9;
+}
+
+
+/* 검색 아이콘 있는 Input */
+.inputWithIconContainer {
+    border-radius: 10px;
+    border: 0.5px solid #c3c3c3;
+    height: 50px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-bottom: 16px;
+}
+
+.inputWithIconContainer input::placeholder {
+    font-size: 15px;
+    color: #979797;
+}
+
+.inputWithIconContainer.focus {
+    border: 1px solid #ff9016;
+}
+
+#searchInput {
+    width: 100%;
+}
+
+#searchInput, #searchInput:focus {
+    border: none;
+    outline: none;
+}
+
+#searchIcon {
+    width: 30px;
+    height: 30px;
+    transition: opacity 0.01s ease-in-out;
+
+}
+
+#searchIcon:active {
+    opacity: 0.7;
+}
+
+/* input_account_password */
+.grayDiv {
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.grayDiv .termItem {
+    margin-left: 16px;
+}
+
+.termItemAll  {
+    background-color: #ffffff;
+    padding: 16px;
+    border: 0.5px solid #c3c3c3;
+    border-radius: 10px
+}
+
+.termItem {
+    display: flex;
+}
+
+.description {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    line-height: 20px;
+}
+
+.arrowImage {
+    width: 16px;
+    height: 16px;
+}
+
+.termItem.invisible {
+    display: none;
+}
+
+.termItemAll.noMargin {
+    margin-bottom: 0px;
+}
+
+.divider {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border: 1px solid #e9e9e9;
+}
+
+/* input_id_photo */
+.footerDescription {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+.footerDescription div p {
+    padding-left: 10px;
+}
+
+.imgContainer {
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-bottom: 48px;
+}
+
+.tendencyImage {
+    max-width: 320px;
+}
+
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+/* input_id_photo_confirm */
+.imgDescriptionContainer {
+    margin-top: 16px;
+}
+.imgDescriptionContainer p {
+    display: inline;
+}
+
+/* input_id_photo_process */
+.loadingContainer {
+    width: 100%;
+    height: 169px;
+
+    background-color: #fff7ee;
+    border: 1px dashed #ff9016;
+    border-radius: 10px;
+}
+
+.loader {
+    font-size: 10px;
+    text-indent: -9999em;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #ff8800;
+    background: -moz-linear-gradient(left, #ff8800 10%, rgba(255,136,0, 0) 42%);
+    background: -webkit-linear-gradient(left, #ff8800 10%, rgba(255,136,0, 0) 42%);
+    background: -o-linear-gradient(left, #ff8800 10%, rgba(255,136,0, 0) 42%);
+    background: -ms-linear-gradient(left, #ff8800 10%, rgba(255,136,0, 0) 42%);
+    background: linear-gradient(to right, #ff8800 10%, rgba(255,136,0, 0) 42%);
+    position: relative;
+    -webkit-animation: load3 1.4s infinite linear;
+    animation: load3 1.4s infinite linear;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  .loader:before {
+    width: 50%;
+    height: 50%;
+    background: #ff8800;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+  }
+  .loader:after {
+    background: #fff7ee; /* same as loadingContainer background color */
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  @-webkit-keyframes load3 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes load3 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+/* input_bank_account */
+.textFieldWithLabelWithDoubledBottom:last-child {
+    margin-bottom: 48px;
+}
+
+/* input_bank_verification_code */
+.bankVerificationImgContainer {
+    margin-bottom: 32px;
+}
+
+.bankVerificationImgContainer img {
+    width: 100%;
+    height: 100%;
+}
+
+/* done */
+.doneImgContainer img {
+    width: 139px;
+    height: 142px;
+}
+.table {
+    border: 1px solid #e9e9e9;
+}
+td:last-child {
+    color: #979797;
+    font-size: 15px;
+    font-weight: bold;
+}
+td.borderOrange {
+    border: 1px solid #ffedd8;
+    background-color: #fff7ee;
+    color: #ffbe7d;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* input_purpose_confirm */
+.dividerWithoutMarginTop {
+    margin-bottom: 24px;
+    border: 0.5px solid #e9e9e9;
+}
+#purposeDetail {
+    margin-top: 8px;
+}
+
+
+
+
+
+
+
+
+/* *********************** */
+/* *** invest_behavior *** */
+/* *********************** */
+.stepContainer {
+    height: 38px;
+    border-radius: 19px;
+    border: solid 1px #e9e9e9;
+    background-color: #f8f8f8;
+    color: #979797;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 19px;
+}
+
+  /* 약관 동의화면 */
+  .questionModal {
+    padding: 0px;
+    background-color: #ffffff;
+  }
+  .questionModal .pageWrapper{
+    min-height: 100%;
+    max-width: 1136px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+/* 세로버튼 margin */
+.RowButtonsMargin {
+    margin-bottom: 16px !important;
+}
+
+
+/* Border Button (Radio) - 투자성향조사용 */
+/* .radioButton.focus,  */
+.radioButton.active {
+    display: flex;
+    width: 100%;
+    padding: 16px 0px;
+    background-color: #fff7ee;
+    border: 1px solid #ff9016;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    color: #ff9016 !important;
+    font-size: 12px !important;
+    font-weight: bold;
+    transition: opacity 0.08s ease-in-out;
+}
+.radioButton {
+    display: flex;
+    width: 100%;
+    padding: 16px 0px;
+    background-color: #ffffff;
+    border: 1px solid #e9e9e9;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    color: #979797 !important;;
+    font-size: 12px !important;
+    font-weight: normal;
+    transition: opacity 0.08s ease-in-out;
+}
+.radioButton:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.radioButton:active {
+    opacity: 0.7;
+}
+
+
+.radioButtons .radioButton{
+    max-width: calc(50% - 4px);
+    margin-bottom: 16px;
+}
+
+
+
+
+/* RoundCheckboxes */
+.roundCheckboxContainer {
+    display: block;
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    font-size: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-bottom: 0px;
+  }
+  
+  /* Hide the browser's default checkbox */
+  .roundCheckboxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+/* Create a custom checkbox */
+.roundCheckbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 1.5px solid #c3c3c3;
+  }
+  
+  /* When the checkbox is checked, add a background color */
+  .roundCheckboxContainer input:checked ~ .roundCheckbox {
+    background-color: #ff9016;
+    border: 4px solid #f8f8f8;
+  }
+
+  .roundCheckboxContainer input:checked ~ .roundCheckboxInside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 1.5px solid #ff9016;
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .roundCheckbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+.dividerContainer {
+    margin-bottom: 24px;
+}
+
+.dividerContainer .divider {
+    width: calc(50% - 20px);
+    height: 1px;
+    background-color: #e9e9e9;
+}
+
+.dividerText {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+
+.radioButtonGrayContainer {
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    padding: 16px;
+}
+
+.radioButtonGrayContainer.disabled .description,
+.radioButtonGrayContainer.disabled .containerTitle {
+    color: #c3c3c3;
+}
+
+
+/* Dotted Divider */
+.dottedDivider {
+    width: 100%;
+    height: 1px;
+    border-top: 1px dotted #e9e9e9;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+
+
+
+/* **************************** */
+/* *** invest_behavior_skip *** */
+/* **************************** */
+.agreementFooterDescription div p {
+    padding-left: 10px;
+}
+
+.ovalColor {
+    background-color: #444444;
+}
+
+.investBehaviorSkip p {
+    margin-bottom: 0;
+}
+
+.grayDiv.grayDivConfirmation p {
+    text-align: center;
+}
+
+.investBehaviorSkip p.marginBottomTiny {
+    margin-bottom: 8px;
+}
+
+.investBehaviorSkip p.marginBottomSmall {
+    margin-bottom: 16px;
+}
+ 
+
+/* **************************** */
+/* *** service_registration *** */
+/* **************************** */
+.integratedMarginTermItem {
+    background-color: #ffffff;
+    padding: 16px;
+    border: 0.5px solid #c3c3c3;
+    border-radius: 10px
+}
+
+.roundButton {
+    border: none;
+    height: 30px;
+    background-color: #fff7ee;
+    color: #ff9016;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 14.5px;
+    padding: 6px 11px;
+
+    transition: opacity 0.08s ease-in-out;
+}
+
+.roundButton:focus {
+    outline: none;
+}
+
+.roundButton:not(.disabled):active {
+    opacity: 0.7;
+}
+
+
+.integratedMarginDescriptionContainer {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.integratedMarginDescriptionContainer div p {
+    padding-left: 10px;
+}
+
+.bottomSheetContent.serviceRegistration {
+    position:absolute;
+    bottom: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: #ffffff;
+    padding: 9px 20px 34px 20px;
+}
+
+#termPage {
+    background-color: #ffffff;
+}
+#termPage .contentWrapper{
+    height: 100%;
+}
+#termPage .termContainer {
+      flex: 1;
+}
+
+.nameTextField {
+    margin-bottom: 8px;
+}
+
+.newUserTextField {
+    margin-right: 8px;
+}
+
+.tendencyImage {
+    max-width: 320px;
+}
+
+details>summary {
+    border-bottom-style:solid;
+    border-bottom-color:rgb(218, 216, 216);
+    border-bottom-width: 1px;
+    padding-bottom:5px;
+    outline:0;
+    border-radius:3px;
+    
+
+
+
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+
+
+
+summary {
+    display: flex !important;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}

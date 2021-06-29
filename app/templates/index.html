@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+ <html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000" />
+    
+    <title>티클 | 투자 성향 분석</title>
+    <style>
+        @import url(http://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
+        @import url(http://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-jp.css);
+    </style>
+        <!-- CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+    <link rel="stylesheet" href={{ url_for('static',filename='common.css')}}>
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+    
+
+    
+    
+</head>
+<body>
+    
+
+    <form method="POST" action='/result'>
+        <div class="container page">
+            <div class="contentWrapper">
+                <div id="question1" class="d-flex flex-column flex-fill">
+                    <!-- Question Title -->
+                    <div class="d-flex pageTitle justify-content-between">
+                        <p class="title3 bold">
+                            현재 고객님의 나이는<br />어떻게 되시나요?
+                        </p>
+                        <div class="stepContainer d-flex">
+                            1/10
+                        </div>
+                    </div>
+                    <!-- Question Radio Buttons -->
+                    <div class="d-flex flex-column questionList marginBottomBase small">
+                        <div class="answer">
+                            <div class="d-flex flex-row btn-group-toggle" data-toggle="buttons">
+                                <label class="btn radioButton marginRightTiny">
+                                    <input type="radio" name="options1" id="option1" value=1 checked >20세 미만
+                                </label>
+                                <label class="btn radioButton marginRightTiny">
+                                    <input type="radio" name="options1" id="option2" value=3>20세~35세 미만
+                                </label>
+                                <label class="btn radioButton marginRightTiny">
+                                    <input type="radio" name="options1" id="option3" value=5>35~50세 미만
+                                </label>
+                                <label class="btn radioButton marginRightTiny">
+                                    <input type="radio" name="options1" id-"option4" value=2>50~65세 미만 
+                                </label>
+                                <label class="btn radioButton">
+                                    <input type="radio" name="options1" id="option5" value=1>65세 이상
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Next Buttons -->
+                    <div class="d-flex mt-auto">
+                        <div class="d-flex flex-row flex-fill align-items-center">
+                            <button type='button'class="squareButton marginRightSmall outline" id="beforeButton1">이전</button>
+                            <button type='button' class="squareButton" id="nextButton1">다음</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="question2" class="modal questionModal" style="height: 100%">
+                <div class="d-flex flex-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title -->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <p class="title3 bold">
+                                향후 수입을 어떻게<br />예상하시나요?
+                            </p>
+                            <div class="stepContainer d-flex">
+                                2/10
+                            </div>
+                        </div>
+                        <!-- Question Radio Buttons -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="answer">
+                                <div class="d-flex flex-column btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options2" id="option1" value=5 checked>현재 일정한 수입이 발생하고 있으며,<br />향후 현재
+                                        수준을 유지하거나 증가할 것 같아요
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options2" id="option2" value=3>현재 일정한 수입이 발생하고 있으나,<br />향후 감소하거나 불안정할
+                                        것 같아요
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options2" id="option2" value=1>현재 일정한 수입이 없으며,<br />연금이 주 수입원이에요
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-items-center">
+                                <button type='button' class="squareButton marginRightSmall outline" id="beforeButton2">이전</button>
+                                <button type='button' class="squareButton" id="nextButton2">다음</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 신한은행 Footer -->
+                    
+                </div>
+            </div>
+            <div id="question3" class="modal questionModal" style="height: 100%">
+                <div class="d-flex flex-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title -->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <p class="title3 bold">
+                                기존에 보유하고 계신<br />총자산 대비 금융자산의<br />비중은 어느 정도인가요?
+                            </p>
+                            <div class="stepContainer d-flex">
+                                3/10
+                            </div>
+                        </div>
+                        <!-- Question Radio Buttons -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="answer">
+                                <div class="d-flex flex-row btn-group-toggle flex-wrap radioButtons justify-content-between" data-toggle="buttons">
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options3" id="option1" value=1 checked>5% 이하
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options3" id="option2" value=2>10% 이하
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options3" id="option2" value=3>20% 이하
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options3" id="option2" value=4>30% 이하
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options3" id="option2" value=5>30% 초과
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-items-center">
+                                <button type='button' class="squareButton marginRightSmall outline" id="beforeButton3">이전</button>
+                                <button type='button' class="squareButton" id="nextButton3">다음</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 신한은행 Footer -->
+                    
+                </div>
+            </div>
+            <div id="question4" class="modal questionModal" style="height: 100%">
+                <div class="d-flex flex-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title -->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <div>
+                                <p class="title3 bold">
+                                    투자한 경험이 있는<br />항목을 모두 선택해주세요
+                                </p>
+                                <p class="regular bold back80">
+                                    (중복 체크 가능)
+                                </p>
+                            </div>
+                            <div class="stepContainer d-flex">
+                                4/10
+                            </div>
+                        </div>
+                        <!-- Question Radio Buttons -->
+                        <!-- 1. 투자 경험 없음 -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="d-flex flex-column btn-group-toggle noExperience" data-toggle="buttons">
+                                <label class="btn radioButton">
+                                    <input type="radio" name="option0" id="option0" checked>금융투자상품에 투자해 본 경험이 없음
+                                </label>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center flex-nowrap dividerContainer">
+                            <div class="divider right"></div>
+                            <div class="d-flex flex-nowrap small back80 dividerText">또는</div>
+                            <div class="divider left"></div>
+                        </div>
+        
+                        <!-- 2-1. 투자 경험 있음 -->
+                        <div class="d-flex flex-column questionList small">
+                            <div id="answerGroup1"
+                                class="nestedAnswer d-flex flex-row btn-group-toggle flex-wrap radioButtons justify-content-between"
+                                data-toggle="buttons">
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="1" id="option1-1">주식신용거래
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="1" id="option1-2">선물/옵션
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="1" id="option1-3">ELW
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="1" id="option1-4">원금비보장형 ELS/DLS/ELF
+                                </div>
+                            </div>
+                        </div>
+                        <div class="period1 d-flex radioButtonGrayContainer back80 flex-column disabled">
+                            <div class="bold small marginBottomSmall containerTitle">기간을 선택해주세요</div>
+                            <div class="d-flex flex-row justify-content-between">
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period1" id="period1-1" value=1 disabled>
+                                    <div class="description small" style="line-height: 20px;">1년 미만</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period1" id="period1-2" value=3 disabled>
+                                    <div class="description small" style="line-height: 20px;">1년 이상 3년 미만</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period1" id="period1-3" value=5 disabled>
+                                    <div class="description small" style="line-height: 20px;">3년 이상</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="dottedDivider"></div>
+                        <!-- 2-2. 투자 경험 있음 -->
+                        <div class="d-flex flex-column questionList small">
+                            <div id="answerGroup2"
+                                class="nestedAnswer d-flex flex-row btn-group-toggle flex-wrap radioButtons justify-content-between"
+                                data-toggle="buttons">
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="2" id="option2-1">주식
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="2" id="option2-2">주식형펀드
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="2" id="option2-3">해외펀드
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="2" id="option2-4">원금보장형 ELS/DLS/ELF
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="2" id="option2-5">투자자문/일임(Wrap)
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="2" id="option2-6">외화증권
+                                </div>
+                            </div>
+                        </div>
+                        <div class="period2 d-flex radioButtonGrayContainer back80 flex-column disabled">
+                            <div class="bold small marginBottomSmall containerTitle">기간을 선택해주세요</div>
+                            <div class="d-flex flex-row justify-content-between">
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period2" id="period2-1" value=1 disabled>
+                                    <div class="description small" style="line-height: 20px;">1년 미만</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period2" id="period2-2" value=3 disabled>
+                                    <div class="description small" style="line-height: 20px;">1년 이상 3년 미만</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period2" id="period2-3" value=5 disabled>
+                                    <div class="description small" style="line-height: 20px;">3년 이상</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="dottedDivider"></div>
+                        <!-- 2-3. 투자 경험 있음 -->
+                        <div class="d-flex flex-column questionList small">
+                            <div id="answerGroup3"
+                                class="nestedAnswer d-flex flex-row btn-group-toggle flex-wrap radioButtons justify-content-between"
+                                data-toggle="buttons">
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="3" id="option3-1">채권/혼합형 펀드
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="3" id="option3-2">신탁
+                                </div>
+                                <div class="btn radioButton">
+                                    <input type="checkbox" name="3" id="option3-3">채권
+                                </div>
+                            </div>
+                        </div>
+                        <div class="period3 d-flex radioButtonGrayContainer back80 flex-column marginBottomLarge disabled">
+                            <div class="bold small marginBottomSmall containerTitle">기간을 선택해주세요</div>
+                            <div class="d-flex flex-row justify-content-between">
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period3" id="period3-1" value=1 disabled>
+                                    <div class="description small" style="line-height: 20px;">1년 미만</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period3" id="period3-2" value=3 disabled>
+                                    <div class="description small" style="line-height: 20px;">1년 이상 3년 미만</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                                <label class="roundCheckboxContainer">
+                                    <input type="radio" name="period3" id="period3-3" value=5 disabled>
+                                    <div class="description small" style="line-height: 20px;">3년 이상</div>
+                                    <span class="roundCheckbox"></span>
+                                    <span class="roundCheckboxInside"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-items-center">
+                                <button type='button' class="squareButton marginRightSmall outline" id="beforeButton4">이전</button>
+                                <button type='button' class="squareButton" id="nextButton4">다음</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 신한은행 Footer -->
+                
+            </div>
+            <div id="question5" class="modal questionModal" style="height: 100%">
+                <div class="d-flex flex-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title -->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <p class="title3 bold">
+                                어떤 목적으로<br />투자하시나요?
+                            </p>
+                            <div class="stepContainer d-flex">
+                                5/10
+                            </div>
+                        </div>
+                        <!-- Question Radio Buttons -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="answer">
+                                <div class="d-flex flex-column btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options5" id="option1" value=1 checked>투자 수익보다<br />원금 보존이 더 중요해요
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options5" id="option2" value=3>원금 보존 가능성을 조금 포기하더라도<br />투자 수익을 낼 수 있으면 좋겠어요
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options5" id="option2" value=5>원금 손실 위험이 있어도<br />높은 투자 수익을 원해요
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-items-center">
+                                <button type='button' class="squareButton marginRightSmall outline" id="beforeButton5">이전</button>
+                                <button type='button' class="squareButton" id="nextButton5">다음</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 신한은행 Footer -->
+                    
+                </div>
+            </div>
+            <div id="question6" class="modal questionModal" style="height: 100%">
+                <div class="d-flex flex-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title -->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <p class="title3 bold">
+                                고객님께서 감내하실 수<br />있는 투자수익 및<br />위험수준은 어느 정도인가요?
+                            </p>
+                            <div class="stepContainer d-flex">
+                                6/10
+                            </div>
+                        </div>
+                        <!-- Question Radio Buttons -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="answer">
+                                <div class="d-flex flex-row btn-group-toggle flex-wrap radioButtons justify-content-between" data-toggle="buttons">
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options6" id="option1" value=1 checked>
+                                        <div class="d-flex flex-column">
+                                            <span class="title2 marginBottomTiny bold">±0%</span>
+                                            무슨 일이 있어도<br />투자 원금은 보전돼야해요
+                                        </div>
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options6" id="option1" value=3>
+                                        <div class="d-flex flex-column">
+                                            <span class="title2 marginBottomTiny bold">±10%</span>
+                                            정도만 변동이 있어도<br />매도하고 나와야 해요
+                                        </div>
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options6" id="option1" value=4>
+                                        <div class="d-flex flex-column">
+                                            <span class="title2 marginBottomTiny bold">±20%</span>
+                                            정도는 당황하지 않고<br />추가 매수도 가능해요
+                                        </div>
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options6" id="option1" value=5>
+                                        <div class="d-flex flex-column">
+                                            <span class="title2 marginBottomTiny bold">±30%</span>
+                                            정도 변동은 버틸 수 있고<br />그 이상의 변동도 가능해요
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-items-center">
+                                <button type='button' class="squareButton marginRightSmall outline" id="beforeButton6">이전</button>
+                                <button type='button' class="squareButton" id="nextButton6">다음</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 신한은행 Footer -->
+                    
+                </div>
+            </div>
+            <div id="question7" class="modal questionModal" style="height: 100%">
+                <div class="d-flex flex-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title -->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <p class="title3 bold">
+                                고객님의 금융지식<br />수준(이해도)는<br />어느정도라고 생각하시나요?
+                            </p>
+                            <div class="stepContainer d-flex">
+                                7/10
+                            </div>
+                        </div>
+                        <!-- Question Radio Buttons -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="answer">
+                                <div class="d-flex flex-column btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options7" id="option1" value=1 checked>예적금 외에 다른 금융투자상품에<br />투자해본 적이 없어요
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options7" id="option2" value=2>주식, 채권, 펀드 같은 일반적인 상품 정도는<br />설명만 좀 들으면, 투자 여부를 결정할 수 있어요
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options7" id="option2" value=3>주식, 채권, 펀드 같은 일반적인 상품은<br />잘 알고 있으며, 투자 여부를 결정할 수 있어요
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options7" id="option2" value=4>파생상품을 포함한 대부분의 금융투자상품에<br />대해 충분히 잘 알고 있어요
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-items-center">
+                                <button type='button' class="squareButton marginRightSmall outline" id="beforeButton7">이전</button>
+                                <button type='button' class="squareButton" id="nextButton7">다음</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 신한은행 Footer -->
+                    
+                </div>
+            </div>
+            
+            <div id="question8" class="modal questionModal" style="height: 100%">
+                <div class="d-flex flex-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title -->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <p class="regular bold">
+                                고령투자자,주부,은퇴자 등<br />금융투자상품에 대한 이해가<br />부족하거나 투자경험이 없는 투자자의<br /> 
+                                경우 「금융소비자 보호 모범규준」에 따른<br />금융취약 계층으로 금융소비자의<br />불이익 사항을 다른 정보보다 우선하여<br /> 
+                                설명 받으실 수 있습니다. 해당 항목에<br />체크하여 주시기 바랍니다.<br />
+                            </p>
+                            <div class="stepContainer d-flex">
+                                8/10
+                            </div>
+                        </div>
+                        <!-- Question Radio Buttons -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="answer">
+                                <div class="d-flex flex-column btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options8" id="option1" checked>금융투자상품에 대한 이해가 부족하거나<br />투자 경험이 없음
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options8" id="option2">해당사항 없음
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-items-center">
+                                <button type='button' class="squareButton marginRightSmall outline" id="beforeButton8">이전</button>
+                                <button type='button' class="squareButton" id="nextButton8">다음</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 신한은행 Footer -->
+                    
+                </div>
+            </div>
+            <div id='question9' class='modal questionModal' style="height: 100%">
+                <div class="d-flex felx-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title-->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <p class="title3 bold">
+                                현재 투자자산에 대한<br /> 투자예정기간은<br />어떻게 되시나요?
+                            </p>
+                            <div class='stepContainer d-flex'>
+                                9/10
+                            </div>
+                        </div>
+                        <!--Question Radio Buttons -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="answer">
+                                <div class="d-flex flex-column btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options9" id="option1" value=1 checked>1년미만
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options9" id="option2" value=2>1년~2년미만
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options9" id="option3" value=3>2년~3년미만
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options9" id="option4" value=4>3년~5년미만
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options9" id="option5" value=5>5년이상
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-itmes-center">
+                                <button type='button' class='squareButton marginRightSmall outline' id="beforeButton9">이전</button>
+                                <button type="button" class="squareButton" id="nextButton9">다음</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id='question10' class='modal questionModal' sytle="height: 100%">
+                <div class="d-flex flex-column pageWrapper">
+                    <div class="d-flex contentWrapper">
+                        <!-- Question Title -->
+                        <div class="d-flex pageTitle justify-content-between">
+                            <p class="title3 bold">
+                                고객님의 연 소득은<br />어떻게 되시나요?
+                            </p>
+                            <div class='d-flex stepContainer'>
+                                10/10
+                            </div>
+                        </div>
+                        <!-- Question Radio Buttons -->
+                        <div class="d-flex flex-column questionList marginBottomBase small">
+                            <div class="answer">
+                                <div class="d-flex flex-column btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options10" id="option1" value=1 checked>2천만원 미만
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options10" id="option2" value=2>2천만원~5천만원 미만
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options10" id="option3" value=3>5천만원~7천만원 미만
+                                    </label>
+                                    <label class="btn radioButton RowButtonsMargin">
+                                        <input type="radio" name="options10" id="option4" value=4>7천만원~1억원 미만
+                                    </label>
+                                    <label class="btn radioButton">
+                                        <input type="radio" name="options10" id="option5" value=5>1억원 이상
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Next Buttons -->
+                        <div class="d-flex mt-auto">
+                            <div class="d-flex flex-row flex-fill align-itmes-center">
+                                <button type="button" class="squareButton marginRightSmall outline" id="beforeButton10">이전</button>
+                                <button class="squareButton" id="nextButton10">제출</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            
+        </div>
+    </form>
+    <script>
+        
+        var size = document.getElementsByName("options1").length;
+        for(var i =0; i<size; i++){
+            if(document.getElementsByName("options1")[i].checked == true){
+                console.log(document.getElementsByName("options1")[i].value);
+            }
+            
+        }
+        for(let i = 1; i <= 11; i++) {
+            $("#nextButton"+i).click(function() {
+                $("#question"+(i+1)).modal('show');
+            })
+            $("#beforeButton"+i).click(function() {            
+                $("#question"+(i)).modal('hide');
+            })
+        }
+
+        // 4번 질문 script
+        // 투자버튼이 선택되지 않음을 체크 
+         function checkAllNestedAnswerButtonsOff() {
+            let result = true;
+            $("#question4 .nestedAnswer input[type='checkbox']").each(function () {
+                if ($(this).is(':checked')) { // 하나라도 체크되어 있으면 안됨
+                    result = false;
+                }
+            })
+            return result;
+        }
+        // 한 섹션의 투자버튼이 선택되지 않음을 체크 
+        function checkSectionNestedAnswerButtonsOff(name) {
+            let result = true;
+            $("#question4 input[name='" + name + "']").each(function () {
+                if ($(this).is(':checked')) { // 하나라도 체크되어 있으면 안됨
+                    result = false;
+                }
+            })
+            return result;
+        }
+        // 투자경험없음 버튼 켜져있는지 체크
+        function isNoExperienceButtonOn() {
+            if($("#question4 .noExperience input[type='radio']").is(':checked')) return true;
+            else return false;
+        }
+        // 투자경험없음 버튼 ON/OFF
+        function controlNoExperienceButton(type) {
+            if (type == "on") {
+                $("#question4 .noExperience label").addClass("active");
+                $("#question4 .noExperience input[type='radio']").prop("checked", true);
+            } else if (type == "off") {
+                $("#question4 .noExperience label").removeClass("active");
+                $("#question4 .noExperience input[type='radio']").prop("checked", false);
+            }
+        }
+        // 한 섹션의 기간버튼 활성화 상태 ON/OFF
+        function disableControl(name, type) {
+            if (type == "on") { // disable 추가하기
+                $("#question4 .period" + name).addClass("disabled");
+                $("#question4 input[name='period" + name + "']").attr('disabled', true);
+                $("#question4 input[name='period" + name + "']").prop('checked', false);
+            } else if (type == "off") { // disable 없애기
+                $("#question4 .period" + name).removeClass("disabled");
+                $("#question4 input[name='period" + name + "']").removeAttr('disabled');
+                $("#question4 input[name='period" + name + "']:first").prop('checked', true);
+            }
+        }
+        $("#question4 .nestedAnswer input[type='checkbox']").change(function () {
+            const inputName = $(this).prop("name");
+            if (isNoExperienceButtonOn()) {
+                console.log("that button is on")
+                if (!checkSectionNestedAnswerButtonsOff(inputName)) {
+                    disableControl(inputName, "off")
+                } else {
+                    disableControl(inputName, "on")
+                }
+            } else if (checkSectionNestedAnswerButtonsOff(inputName)) {
+                disableControl(inputName, "on")
+            } else {
+                disableControl(inputName, "off")
+            }
+        })
+        // 투자경험 없음 버튼 해제 또는 활성화
+        $("#question4 .nestedAnswer input[type='checkbox']").change(function () {
+            if (this.checked) {
+                controlNoExperienceButton("off");
+            } else {
+                if (checkAllNestedAnswerButtonsOff()) {
+                    controlNoExperienceButton("on");
+                }
+            }
+        })
+        // 없음 누르면 전부 해제
+        $("#question4 .noExperience input[type='radio']").click(function () {
+            $("#question4 .nestedAnswer input[type='checkbox']").each(function () {
+                $(this).removeAttr("checked");
+                $(this).parent("div").removeClass("active");
+            })
+            $("#question4 .radioButtonGrayContainer input[type='radio']").each(function () {
+                $(this).attr('disabled', true);
+                $(this).prop('checked', false);
+            })
+            $("#question4 .radioButtonGrayContainer").each(function () {
+                $(this).addClass('disabled');
+            })
+        })
+
+        console.log($(".title3").text())
+
+
+    </script>
+
+        
+</body>
+
+</html>
