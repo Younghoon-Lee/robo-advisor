@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000" />
+    <title>티클 | 투자 성향 분석</title>
+    <style>
+        @import url(http://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
+        @import url(http://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-jp.css);
+    </style>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href={{ url_for('static',filename='common.css')}}>
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container page">
+        <div class="contentWrapper">
+            <div class="d-flex flex-column pageTitle">
+                <p class="title3 bold marginBottomTiny" id="user_type">
+                    이영훈님의 투자성향은<br />
+                    {% if user_type == "안정형"%}
+                        안전형입니다
+                    {% elif user_type == "안정추구형"%}
+                        안전추구형입니다
+                    {% elif user_type == "위험중립형"%}
+                        위험중립형입니다
+                    {% elif user_type == "적극투자형"%}
+                        적극투자형입니다
+                    {% else %}
+                        공격투자형입니다
+                    {% endif %}
+                </p>
+        
+            </div>
+            <!-- 투자자 성향 등급 이미지(돼지)!! -->
+            <div class="d-flex flex-column align-items-center">
+                {% if user_type == "안전형"%}
+                    <img class="tendencyImage" src= {{ url_for('static',filename='grade5.png')}}/>
+                {% elif user_type == "안전추구형"%}
+                    <img class="tendencyImage" src= {{ url_for('static',filename='grade4.png')}}/>
+                {% elif user_type == "위험중립형"%}
+                    <img class="tendencyImage" src= {{ url_for('static',filename='grade3.png')}}/>
+                {% elif user_type == "적극투자형"%}
+                    <img class="tendencyImage" src= {{ url_for('static',filename='grade2.png')}}/>
+                {% else%}
+                    <img class="tendencyImage" src= {{ url_for('static',filename='grade1.png')}}/>
+                {% endif%}
+            </div>
+            <div class="d-flex flex-column pageTitleWithDescription">
+                <p class="tendencyDescription" style="text-align: center">
+                    {% if user_type == "안정형"%}
+                        투자원금에 손실이 발생하는 것을 원하지 않으며<br />
+                        예금 또는 적금 수준의 수익률을 기대해요
+                    {% elif user_type == "안전추구형"%}
+                        투자원금의 손실 위험은 최소화하고 싶으며<br />
+                        수익을 위해 단기적인 손실은 수용할 수 있어요
+                    {% elif user_type == "위험중립형"%}
+                        투자에 상응하는 투자 위험이 있음을 인식하고 있어요<br />
+                        높은 수익을 위해 일정 수준의 손실을 감수할 수 있어요
+                    {% elif user_type == "적극투자형"%}
+                        투자원금의 보전보다는 위험을 감수하더라도<br />
+                        높은 수준의 투자 수익을 얻고 싶어요
+                    {% else %}
+                        시장평균 수익률을 훨씬 넘어서는 높은 수익을 원하며<br />
+                        자산가치의 변동에 따른 손실위험을 적극 수용할 수 있어요
+                    {% endif%}
+                </p>
+            </div>
+            
+            <div class="d-flex mt-auto">
+                <button class="squareButton" id="nextButton" onclick="location.href='{{ url_for('optimize')}}' ">포트폴리오 선택하기</button>
+            </div>
+        </div>
+        
+    </div>
+    
+</body>
+
+</html>
