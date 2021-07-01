@@ -5,7 +5,9 @@ import statistics
 import pandas as pd
 from datetime import datetime, timedelta
 import math
-from src.stock_data_collector import StockDataCollector
+import os
+if __name__ != "__main__":
+    from src.stock_data_collector import StockDataCollector
 
 
 class RebalancingSimulator:
@@ -257,8 +259,6 @@ class RebalancingSimulator:
         frac_units = self.frac_units
         target_weights = self.target_weights
         trade_cost = self.trade_cost
-        # regular_rebalancing_day = ['2020-09-24 00:00:00',
-        #                            '2020-12-24 00:00:00', '2021-03-24 00:00:00']
 
         port_val = sum(x * y for x, y in zip(unit_holdings,
                        unit_prices)) + self.sim_cash_balance
@@ -328,15 +328,34 @@ class RebalancingSimulator:
         self.current_unit_holdings = unit_holdings
         return port_val, new_weights, weight_diffs, new_target_vals, unit_holdings, trade_count
 
+    def save_to_sqlite(self):
+        dirname = os.path.dirname(__file__)
+
+        risk_level = self.optimal_portfolio.risk_tolerance
+        if risk_level == 2:
+            portfolio_type = "passive"
+        elif risk_level == 3:
+            portfolio_type = "semi"
+        elif risk_level == 4:
+            portfolio_type = "aggressvie"
+        dic = {'portfolio_type': [portfolio_type]*len(self.asset_list), 'ticker': [], 'nameKo': [],
+               'target_weight': [], 'before_weight': [], 'after_weight': []}
+        df = pd.DataFrame(dic)
+        import sqlite3
+        con = sqlite3.connect(dirname + 'main.db')
+        df.to_sql(portfolio_type, con, if_exists='replace')
+
 
 if __name__ == "__main__":
-    from optimizer import PortfolioOptimizer
-    assets = ['252670.KS', '091220.KS', '114800.KS', '122630.KS', '251340.KS',
-              '233740.KS', '252710.KS', '214980.KS']
-    test = PortfolioOptimizer(assets)
-    test.fetch_data()
-    test.get_optimal_portfolio()
-    rebalancer = RebalancingSimulator(test, back_test=True)
-    rebalancer.data_prep()
-    rebalancer.initialize_portfolio()
-    rebalancer.run_simulation()
+    import os
+    print(os.path.dirname(__file__))
+    # from optimizer import PortfolioOptimizer
+    # assets = ['252670.KS', '091220.KS', '114800.KS', '122630.KS', '251340.KS',
+    #           '233740.KS', '252710.KS', '214980.KS']
+    # test = PortfolioOptimizer(assets)
+    # test.fetch_data()
+    # test.get_optimal_portfolio()
+    # rebalancer = RebalancingSimulator(test, back_test=True)
+    # rebalancer.data_prep()
+    # rebalancer.initialize_portfolio()
+    # rebalancer.run_simulation()
