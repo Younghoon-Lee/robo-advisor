@@ -1,7 +1,18 @@
 from flask import Flask, request, render_template, make_response
 import sqlite3
+import os
+from models import db
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+dbfile = os.path.join(basedir, 'db.sqlite')
+
+# configuration
+DEBUG = True
+SQLALCHEMY_DATABASE_URL = 'sqlite:///' + dbfile
+SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
 app = Flask(__name__)
+app.config.from_object(__name__)
 
 NUMBER_OF_QUESTIONS = 10
 
@@ -99,6 +110,11 @@ def result():
 @app.route('/optimize')
 def optimize():
     return "Meet You Soon"
+
+
+db.init_app(app)
+db.app = app
+db.create_all()
 
 
 if __name__ == '__main__':
