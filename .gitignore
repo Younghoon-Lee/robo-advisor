@@ -132,3 +132,7 @@ dmypy.json
 *.csv
 
 .vscode
+
+# ignore folder
+test/
+koscom/

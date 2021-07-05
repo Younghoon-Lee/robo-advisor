@@ -207,7 +207,7 @@ class RebalancingSimulator:
             plt.figure(figsize=(12, 4))
             plt.title('Simulation Cash Level')
             plt.plot(self.sim_cash_history)
-            plt.sho()
+            plt.show()
 
             plt.figure(figsize=(12, 4))
             plt.title('Asset Weight History')
@@ -215,7 +215,7 @@ class RebalancingSimulator:
                 trace = [x[i] for x in self.sim_weight_vals]
                 plt.plot(trace, labe=self.asset_list[i])
             plt.legend()
-            plt.sho()
+            plt.show()
 
         self.total_trades = sum(self.sim_trade_history)
 
@@ -249,6 +249,7 @@ class RebalancingSimulator:
             print('  Average of {} portforlio weight: {}'.format(
                 asset, round(statistics.mean(weight_history), 4)))
             print('')
+        self.save_to_sqlite()
 
         return
 
@@ -324,31 +325,44 @@ class RebalancingSimulator:
                         pass
 
             self.rebalancing_counter = 0
+            # 현장 심사 db 저장용
+            port_val_after = sum(
+                x * y for x, y in zip(unit_holdings, unit_prices)) + self.sim_cash_balance
+            self.after_weights = [
+                (x*y)/port_val_after for x, y in zip(unit_holdings, unit_prices)]
 
         self.current_unit_holdings = unit_holdings
         return port_val, new_weights, weight_diffs, new_target_vals, unit_holdings, trade_count
 
     def save_to_sqlite(self):
-        dirname = os.path.dirname(__file__)
+        dirname = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
         risk_level = self.optimal_portfolio.risk_tolerance
         if risk_level == 2:
-            portfolio_type = "passive"
+            portfolio_type = "안전추구형"
         elif risk_level == 3:
-            portfolio_type = "semi"
+            portfolio_type = "위험중립형"
         elif risk_level == 4:
-            portfolio_type = "aggressvie"
-        dic = {'portfolio_type': [portfolio_type]*len(self.asset_list), 'ticker': [], 'nameKo': [],
-               'target_weight': [], 'before_weight': [], 'after_weight': []}
+            portfolio_type = "적극투자형"
+        universe = self.optimal_portfolio.universe
+        nameKo, riskType = [], []
+        for asset in self.asset_list:
+            nameKo.append(universe[universe['ISIN'] == asset]["종목명"].values[0])
+            riskType.append(
+                universe[universe['ISIN'] == asset]['위험등급'].values[0])
+
+        dic = {'ticker': self.asset_list, 'nameKo': nameKo, 'riskType': riskType,
+               'targetWeight': self.target_weights, 'beforeWeight': self.before_weights, 'afterWeight': self.after_weights}
         df = pd.DataFrame(dic)
         import sqlite3
-        con = sqlite3.connect(dirname + 'main.db')
-        df.to_sql(portfolio_type, con, if_exists='replace')
+        con = sqlite3.connect(dirname + '/main.db')
+        df.to_sql(portfolio_type, con, if_exists='replace', index=False)
+        print("Completely saved stock data to db")
 
 
 if __name__ == "__main__":
     import os
-    print(os.path.dirname(__file__))
+    print(os.path.dirname(os.path.dirname(__file__)))
     # from optimizer import PortfolioOptimizer
     # assets = ['252670.KS', '091220.KS', '114800.KS', '122630.KS', '251340.KS',
     #           '233740.KS', '252710.KS', '214980.KS']

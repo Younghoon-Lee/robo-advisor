@@ -107,6 +107,7 @@ class PortfolioOptimizer:
         # create sector mapper
         universe = pd.read_csv(
             "/Users/tickle/tickle/robo-advisor/universe.csv")
+        self.universe = universe
         sector_mapper = {}
         for asset in self.asset_basket:
             sector_mapper[asset] = universe[universe["ISIN"]
