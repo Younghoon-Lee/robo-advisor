@@ -191,7 +191,7 @@
                         <div class="d-flex flex-column questionList marginBottomBase small">
                             <div class="d-flex flex-column btn-group-toggle noExperience" data-toggle="buttons">
                                 <label class="btn radioButton">
-                                    <input type="radio" name="options4" id="option1" checked>금융투자상품에 투자해 본 경험이 없음
+                                    <input type="radio" name="option0" id="option0" checked>금융투자상품에 투자해 본 경험이 없음
                                 </label>
                             </div>
                         </div>
@@ -725,6 +725,19 @@
             })
         })
 
+        
+        $("#option0").click(function () {
+            for(let i=1;i<4;i++) {
+                $(`#answerGroup${i} input[type='checkbox']`).each(function () {
+                    $(this).prop('checked',false);
+                })
+                $(`#question4 .period${i} input[type='radio']`).each(function () {
+                    $(this).prop('checked',false)
+                })
+                
+            }           
+        })
+        
         console.log($(".title3").text())
 
 

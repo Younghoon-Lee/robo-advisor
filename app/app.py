@@ -1,18 +1,18 @@
 from flask import Flask, request, render_template, make_response
-import sqlite3
 import os
-from models import db
+from sqlalchemy import create_engine, text
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-dbfile = os.path.join(basedir, 'db.sqlite')
+dirname = os.path.abspath(os.path.dirname(__file__))
+engine = create_engine('sqlite+pysqlite:///'+dirname +
+                       '/main.db', future=True, echo=True)
+
 
 # configuration
 DEBUG = True
-SQLALCHEMY_DATABASE_URL = 'sqlite:///' + dbfile
-SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+
 
 NUMBER_OF_QUESTIONS = 10
 
@@ -28,25 +28,25 @@ def result():
     if request.method == 'POST':
         total_score = 0
         for i in range(1, NUMBER_OF_QUESTIONS+1):
-
             if i == 4:
-                period_score = []
-                invest_score = []
+                period_score, invest_score = [], []
 
                 if request.form.get('1') == 'on':
                     invest_score.append(6)
-                    period_score.append(int(request.method['period1']))
+                    period_score.append(int(request.form.get('period1')))
                 if request.form.get('2') == 'on':
                     invest_score.append(3)
-                    period_score.append(int(request.method['period2']))
+                    period_score.append(int(request.form.get('period2')))
                 if request.form.get('3') == 'on':
                     invest_score.append(1)
-                    period_score.append(int(request.method['period3']))
+                    period_score.append(int(request.form.get('period3')))
                 if invest_score:
                     total_score += max(period_score) + max(invest_score)
-            if i == 8 or 9:
+            elif i == 8 or i == 9:
                 continue
-            total_score += int(request.form['options'+str(i)])
+            else:
+                total_score += int(request.form.get('options'+str(i)))
+        print(total_score)
 
         # 투자자성향 분류 1단계
         if total_score <= 14:
@@ -101,6 +101,10 @@ def result():
                 user_type = "공격투자형"
         response = make_response(render_template(
             'result.html', user_type=user_type))
+        response.set_cookie('user_type', user_type)
+
+        if user_type == '안정형':
+            return "Ineligible"
 
         return response
     else:
@@ -109,12 +113,38 @@ def result():
 
 @app.route('/optimize')
 def optimize():
+    user_type = request.cookies.get('user_type')
+    if user_type == '공격투자형':
+        user_type = '적극투자형'
+    results, schema, assetType = [], {
+        'assetType': None, 'weight': 0.0, 'items': []}, []
+
+    with engine.connect() as conn:
+        rows = conn.execute(text("SELECT * FROM {}".format(user_type)))
+        for row in rows.mappings():
+            temp = schema.copy()
+            if row['assetType'] not in assetType:
+                temp['assetType'] = row['assetType']
+                temp['items'].append(row)
+                assetType.append(row['assetType'])
+                results.append(temp)
+                continue
+            for result in results:
+                if result['assetType'] == row['assetType']:
+                    result['items'].append(row)
+                    break
+    for result in results:
+        result['weight'] = sum([item['targetWeight']
+                               for item in result['items']])
+    print(len(results))
+    print(results)
+
+    return render_template('optimize.html', results=results, user_type=user_type)
+
+
+@app.route('/rebalance')
+def rebalance():
     return "Meet You Soon"
-
-
-db.init_app(app)
-db.app = app
-db.create_all()
 
 
 if __name__ == '__main__':

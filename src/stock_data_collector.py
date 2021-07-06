@@ -36,7 +36,8 @@ class StockDataCollector:
 
 
 if __name__ == '__main__':
-    df = pd.read_csv("/Users/tickle/tickle/robo-advisor/universe.csv")
+    dirname = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    df = pd.read_csv(dirname+'/universe.csv')
     tickers = df["ISIN"].to_list()[:-1]
     start_date = (datetime.today()-timedelta(weeks=78)).strftime("%Y%m%d")
     end_date = datetime.today().strftime("%Y%m%d")

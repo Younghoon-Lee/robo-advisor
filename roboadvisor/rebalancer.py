@@ -345,17 +345,19 @@ class RebalancingSimulator:
         elif risk_level == 4:
             portfolio_type = "적극투자형"
         universe = self.optimal_portfolio.universe
-        nameKo, riskType = [], []
+        nameKo, riskType, assetType = [], [], []
         for asset in self.asset_list:
             nameKo.append(universe[universe['ISIN'] == asset]["종목명"].values[0])
             riskType.append(
                 universe[universe['ISIN'] == asset]['위험등급'].values[0])
+            assetType.append(
+                universe[universe['ISIN'] == asset]['자산종류'].values[0])
 
-        dic = {'ticker': self.asset_list, 'nameKo': nameKo, 'riskType': riskType,
+        dic = {'ticker': self.asset_list, 'nameKo': nameKo, 'riskType': riskType, 'assetType': assetType,
                'targetWeight': self.target_weights, 'beforeWeight': self.before_weights, 'afterWeight': self.after_weights}
         df = pd.DataFrame(dic)
         import sqlite3
-        con = sqlite3.connect(dirname + '/main.db')
+        con = sqlite3.connect(dirname + '/app/main.db')
         df.to_sql(portfolio_type, con, if_exists='replace', index=False)
         print("Completely saved stock data to db")
 
