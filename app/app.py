@@ -123,6 +123,7 @@ def optimize():
         rows = conn.execute(text("SELECT * FROM {}".format(user_type)))
         for row in rows.mappings():
             temp = schema.copy()
+            temp['items'] = []
             if row['assetType'] not in assetType:
                 temp['assetType'] = row['assetType']
                 temp['items'].append(row)
@@ -133,18 +134,44 @@ def optimize():
                 if result['assetType'] == row['assetType']:
                     result['items'].append(row)
                     break
+        conn.commit()
     for result in results:
         result['weight'] = sum([item['targetWeight']
                                for item in result['items']])
-    print(len(results))
-    print(results)
 
     return render_template('optimize.html', results=results, user_type=user_type)
 
 
 @app.route('/rebalance')
 def rebalance():
-    return "Meet You Soon"
+    user_type = request.cookies.get('user_type')
+    if user_type == "공격투자형":
+        user_type = "적극투자형"
+    results, schema, assetType = [], {
+        'assetType': None, 'weightBefore': 0.0, 'weightAfter': 0.0, 'items': []}, []
+
+    with engine.connect() as conn:
+        rows = conn.execute(text("SELECT * FROM {}".format(user_type)))
+        for row in rows.mappings():
+            temp = schema.copy()
+            temp['items'] = []
+            if row['assetType'] not in assetType:
+                temp['assetType'] = row['assetType']
+                temp['items'].append(row)
+                assetType.append(row['assetType'])
+                results.append(temp)
+                continue
+            for result in results:
+                if result['assetType'] == row['assetType']:
+                    result['items'].append(row)
+                    break
+        conn.commit()
+    for result in results:
+        result['weightBefore'] = sum([item['beforeWeight']
+                                      for item in result['items']])
+        result['weightAfter'] = sum([item['afterWeight']
+                                     for item in result['items']])
+    return render_template('rebalance.html', results=results, user_type=user_type)
 
 
 if __name__ == '__main__':

@@ -50,9 +50,9 @@
                                 <div style="font-size:15px" class="flex-fill">{{result.assetType}}</div>
                                 <div style="font-size:16px; font-weight:bold" class="typeWeight">{{result.weight}}</div>
                             </div>
+                       
                         </summary>
-                        
-                        {% for item in result.items%}
+                        {% for item in result["items"] %}
                             <div class='d-flex justify-content-between'>
                                 <div style="color: #979797; font-size:13px; width:100px">{{item.nameKo}}({{item.ticker}})</div>
                                 {% if (item.riskType == '초고위험') or (item.riskType =='고위험') %}
@@ -62,7 +62,7 @@
                                 {% endif %}
                                 <div style="color: #979797; font-size:13px; text-align:right; width:80px" >{{item.targetWeight}}</div>
                             </div>
-                        {% endfor %}
+                        {% endfor %}     
                     </details>
                 {% endfor %}
                 

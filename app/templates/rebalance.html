@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+ <html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000" />
+    <title>포트폴리오 선택</title>
+    <style>
+        @import url(http://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
+        @import url(http://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-jp.css);
+    
+    </style>
+    <!-- CSS -->
+    <link rel="stylesheet" href={{url_for('static',filename='common.css')}}>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    
+</head>
+<body>
+    <div class="container page">
+        <div class="contentWrapper">
+            <div class="d-flex flex-column pageTitle">
+                <p class="title3 bold marginBottomSmall" align="center">
+                    {{user_type}}
+                </p>
+                <p style="color:#AAAAAA; font-size:12px;" align="center">
+                    2021년 2분기 리밸런싱
+                </p>
+            </div>
+            <!-- before/after button -->
+            <div class="d-flex flex-row justify-content-center marginBottomLarge">
+                <button class="squareButton marginRightTiny" id="beforeButton" type="button" onclick="clickItem('before')" style="width:40%; height:45px;">BEFORE</button>
+                <button class="squareButton outline" id="afterButton" type="button" onclick="clickItem('after')" style="width:40%; height:45px;">AFTER</button>    
+            </div>
+            
+            <!-- PIE CHART -->
+            <div id="dataContainer" class="d-flex flex-column flex-fill align-items-center" sytle="height:50%;">
+                <div id="before" class="flex-column" style="display: flex; width: 100%">
+                    <div class="d-flex flex-column align-items-center doneImgContainer marginBottomSmall">
+                        <canvas id="myChartBefore" style="height:25vh; width:40vw"></canvas>
+                    </div>
+                    <div class="d-flex flex-column marginBottomSmall">
+                        
+                        {% for result in results%}
+                            <details>
+                                <summary>
+                                    <div style="display: flex; justify-content: space-between; flex-direction: row; align-item: center; width: 100%;">
+                                        <div class='v1' style="border-left: 3px solid #F3CA43; margin-right:5px; width:5px; height:25px;"></div>
+                                        <div style="font-size:15px" class="flex-fill">{{result.assetType}}</div>
+                                        <div style="font-size:16px; font-weight:bold" class="typeWeightBefore">{{result.weightBefore}}</div>
+                                    </div>
+                                </summary>
+                                
+                                {% for item in result["items"]%}
+                                    <div class='d-flex justify-content-between'>
+                                        <div style="color: #979797; font-size:13px; width:100px">{{item.nameKo}}({{item.ticker}})</div>
+                                        {% if (item.riskType == '고위험') or (item.riskType == '초고위험')%}
+                                            <div style="color: #f65555; font-size:12px; text-align:center;">● {{item.riskType}}</div>
+                                        {% else %}
+                                            <div style="color: #7390fc; font-size:12px; text-align:center;">● {{item.riskType}}</div>
+                                        {% endif %}
+                                        <div style="color: #979797; font-size:13px; text-align:right; width:80px;">{{item.beforeWeight}}</div>
+                                        </div>
+                                {% endfor %}
+                            </details>
+                        {% endfor%}
+                            <details>
+                                <summary>
+                                    <div style="display: flex; justify-content: space-between; flex-direction: row; align-item: center; width: 100%;">
+                                        <div class='v1Cash' style="border-left: 3px solid #F3CA43; margin-right:5px; width:5px; height:25px;"></div>
+                                        <div style="font-size:15px" class="flex-fill">유동성 자산</div>
+                                        <div style="font-size;16px; font-weight:bold;" class="cashWeightBefore">>0</div>
+                                    </div>
+                                </summary>
+                            </details>
+                        
+                    </div>
+                </div>
+                {#after pie chart#}
+                <div id="after" class="flex-column" style="display: none; width:100%;">
+                    <div class="d-flex flex-column align-items-center doneImgContainer marginBottomSmall">
+                        <canvas id="myChartAfter" style="height:25vh; width:40vw"></canvas>
+                    </div>
+                    <div class="d-flex flex-column marginBottomSmall">
+                        
+                        {% for result in results%}
+                            <details>
+                                <summary>
+                                    <div style="display: flex; justify-content: space-between; flex-direction: row; align-item: center; width: 100%;">
+                                        <div class='v2' style="border-left: 3px solid #F3CA43; margin-right:5px; width:5px; height:25px;"></div>
+                                        <div style="font-size:15px" class="flex-fill">{{result.assetType}}</div>
+                                        <div style="font-size:16px; font-weight:bold" class="typeWeightAfter">{{result.weightAfter}}</div>
+                                    </div>
+                                </summary>
+                                
+                                {% for item in result["items"]%}
+                                    <div class='d-flex justify-content-between'>
+                                        <div style="color: #979797; font-size:13px; width:100px">{{item.nameKo}}({{item.ticker}})</div>
+                                        {% if (item.riskType == '고위험') or (item.riskType == '초고위험')%}
+                                            <div style="color: #f65555; font-size:12px; text-align:center;">● {{item.riskType}}</div>
+                                        {% else %}
+                                            <div style="color: #7390fc; font-size:12px; text-align:center;">● {{item.riskType}}</div>
+                                        {% endif %}
+                                        <div style="color: #979797; font-size:13px">{{item.afterWeight}}</div>
+                                    </div>
+                                {% endfor %}
+                            </details>
+                        {% endfor%}
+                            <details>
+                                <summary>
+                                    <div style="display: flex; justify-content: space-between; flex-direction: row; align-item: center; width: 100%;">
+                                        <div class='v2Cash' style="border-left: 3px solid #F3CA43; margin-right:5px; width:5px; height:25px;"></div>
+                                        <div style="font-size:15px" class="flex-fill">유동성 자산</div>
+                                        <div style="font-size;16px; font-weight:bold;" class="cashWeightAfter">>0</div>
+                                    </div>
+                                </summary>
+                            </details>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="d-flex mt-auto">
+                <button class="squareButton" id="nextButton">다음</button>
+            </div>
+        </div>
+        
+    </div>
+
+    
+    <script>
+    var typeWeightBefore = [] ;
+    var typeWeightBeforeLength = document.getElementsByClassName("typeWeightBefore").length;
+    var colorArr = ['#F3CA43','#F79400',"#F76F00","#F85103","#FAE103","#F36DAC"]
+    for (var i=0; i<document.getElementsByClassName("typeWeightBefore").length;i++){
+        var temp = document.getElementsByClassName("typeWeightBefore")[i].textContent;
+        typeWeightBefore.push(parseFloat(temp));
+        document.getElementsByClassName("typeWeightBefore")[i].textContent=(temp*100).toFixed(2)+"%";
+        document.getElementsByClassName("v1")[i].style.borderLeftColor=colorArr[i];
+    }
+
+    var resultBefore = typeWeightBefore.reduce(function add(sum, currValue) {
+        return sum+currValue;
+    },0);
+    resultBefore = resultBefore.toFixed(4);
+    const cashBefore = (1-resultBefore).toFixed(4);
+    document.getElementsByClassName("cashWeightBefore")[0].textContent=(cashBefore*100).toFixed(2)+'%';
+    document.getElementsByClassName("v1Cash")[0].style.borderLeftColor=colorArr[typeWeightBeforeLength];
+    typeWeightBefore.push(cashBefore);
+
+    var typeWeightAfter = [] ;
+    var typeWeightAfterLength = document.getElementsByClassName("typeWeightAfter").length;
+    for (var i=0; i<document.getElementsByClassName("typeWeightAfter").length;i++){
+        var temp = document.getElementsByClassName("typeWeightAfter")[i].textContent;
+        typeWeightAfter.push(parseFloat(temp));
+        document.getElementsByClassName("typeWeightAfter")[i].textContent=(temp*100).toFixed(2)+"%";
+        document.getElementsByClassName("v2")[i].style.borderLeftColor=colorArr[i];
+    }
+
+    var resultAfter = typeWeightAfter.reduce(function add(sum, currValue) {
+        return sum+currValue;
+    },0);
+    resultAfter = resultAfter.toFixed(4);
+    const cashAfter = (1-resultAfter).toFixed(4);
+    document.getElementsByClassName("cashWeightAfter")[0].textContent=(cashAfter*100).toFixed(2)+'%';
+    document.getElementsByClassName("v2Cash")[0].style.borderLeftColor=colorArr[typeWeightAfterLength];
+    typeWeightAfter.push(cashAfter);
+
+    function clickItem(button) {
+        if(button === "before") {
+            $("#before").css("display","flex");
+            $('#after').css("display","none");
+            $("#beforeButton").removeClass("outline");
+            $("#afterButton").addClass("outline");
+        } else {
+            $("#after").css("display","flex");
+            $("#before").css("display","none");
+            $("#beforeButton").addClass("outline");
+            $("#afterButton").removeClass("outline");
+        }
+    }
+
+
+
+    
+    var ctx = document.getElementById('myChartBefore');
+    var myChart = new Chart(ctx, {
+        type : 'pie',
+        data : {
+            
+            datasets: [{
+                label : 'My First dataset',
+                backgroundColor : [
+                    '#F3CA43',
+                    '#F79400',
+                    '#F76F00',
+                    '#F85103',
+                    '#FAE103',
+                    '#F36DAC'
+                ],
+
+                
+                data: typeWeightBefore
+            }]
+        },
+        options: {
+            responsive :false
+        }
+        
+    });
+    var ctx2 = document.getElementById("myChartAfter");
+    var myChart2 = new Chart(ctx2, {
+        type : 'pie',
+        data : {
+            
+            datasets: [{
+                label : 'My First dataset',
+                backgroundColor : [
+                    '#F3CA43',
+                    '#F79400',
+                    '#F76F00',
+                    '#F85103',
+                    '#FAE103',
+                    '#F36DAC'
+                ],
+
+                
+                data: typeWeightAfter
+            }]
+        },
+        options: {
+            responsive :false
+        }
+        
+    });
+    </script>
+    
+    
+</body>
