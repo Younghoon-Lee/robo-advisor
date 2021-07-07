@@ -174,5 +174,10 @@ def rebalance():
     return render_template('rebalance.html', results=results, user_type=user_type)
 
 
+@app.route('/selection')
+def selection():
+    return render_template('selection.html')
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)

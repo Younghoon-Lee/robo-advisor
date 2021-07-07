@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}
+포트폴리오 셀렉션
+{% endblock %}
+{% block script%}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>{% endblock %}
+{% block content %}
+    <div class="container page">
+        <div class="contentWrapper">
+            <div class="d-flex flex-column marginBottomLarge">
+                <p class="title2 bold" align="center">
+                    포트폴리오 셀렉션
+                </p>
+                <div class="d-flex flex-column align-items-center marginBottomNone">
+                    <p class="bold">
+                        적극투자형
+                    </p>
+                </div>
+                <div class="d-flex flex-column align-items-center marginBottomLarge">
+                    <canvas id="aggressiveChart" style="height:50vh; width:80vw"></canvas>
+                </div>
+                <div class="d-flex flex-column pageTitleWithDescription" style="color: #979797;">
+                    <p class="tendencyDescription" style="text-align: center">
+                        고위험자산 70%, 저위험자산 30%의</br> 포트폴리오에요! 
+                    </p>
+                </div>
+                <div class="d-flex flex-column align-items-center marginBottomNone">
+                    <p class="bold">
+                        위험중립형
+                    </p>
+                </div>
+                <div class="d-flex flex-column align-items-center marginBottomLarge">
+                    <canvas id="semiChart" style="height:50vh; width:80vw"></canvas>
+                </div>
+                <div class="d-flex flex-column pageTitleWithDescription" style="color: #979797;">
+                    <p class="tendencyDescription" style="text-align: center">
+                        고위험자산 55%, 저위험자산 45%의 </br>포트폴리오예요! 
+                    </p>
+                </div>
+                <div class="d-flex flex-column align-items-center marginBottomNone">
+                    <p class="bold">
+                        안전추구형
+                    </p>
+                </div>
+                <div class="d-flex flex-column align-items-center marginBottomLarge">
+                    <canvas id="passiveChart" style="height:50vh; width:80vw"></canvas>
+                </div>
+                <div class="d-flex flex-column pageTitleWithDescription" style="color: #282828;">
+                    <p class="tendencyDescription" style="text-align: center">
+                        고위험자산 35%, 저위험자산 45%의</br> 포트폴리오이에요! 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const AGRESSIVE = [0.7,0.3];
+    const SEMI = [0.55,0.45];
+    const PASSIVE = [0.35,0.65];
+    let colorArr = ['#F3CA43','#F79400'];
+
+    const aggressiveCTX = document.getElementById("aggressiveChart");
+    const aggressiveChart = new Chart(aggressiveCTX, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                label:'aggressive',
+                backgroundColor : colorArr,
+                data: AGRESSIVE
+            }]
+        },
+        options: {
+            responsive : false
+        }
+    })
+    const semiCTX = document.getElementById("semiChart");
+    const semiChart = new Chart(semiCTX, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                label:'semi',
+                backgroundColor : colorArr,
+                data: SEMI
+            }]
+        },
+        options: {
+            responsive : false
+        }
+    })
+    const passiveCTX = document.getElementById("passiveChart");
+    const passiveChart = new Chart(passiveCTX, {
+        type: 'pie',
+        data: {
+            datasets: [{
+                label:'passive',
+                backgroundColor : colorArr,
+                data: PASSIVE
+            }]
+        },
+        options: {
+            responsive : false
+        }
+    })
+
+    </script>
+{% endblock %}
