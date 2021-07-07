@@ -136,3 +136,5 @@ dmypy.json
 # ignore folder
 test/
 koscom/
+
+.DS_Store
