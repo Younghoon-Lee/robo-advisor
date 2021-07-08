@@ -59,13 +59,13 @@ def result():
             user_type_level = 2  # 적극투자형
         else:
             user_type_level = 1  # 공격투자형
-
+        print(user_type_level)
         # 투자자성향 분류 2단계
         investing_period = int(request.form['options9'])
         if investing_period == 1:
             if (user_type_level == 1) or (user_type_level == 2):
                 user_type = "위험중립형"
-            if (user_type_level == 3) or (user_type_level == 4):
+            elif (user_type_level == 3) or (user_type_level == 4):
                 user_type = "안전추구형"
             else:
                 user_type = "안정형"
@@ -99,6 +99,7 @@ def result():
                 user_type = "위험중립형"
             else:
                 user_type = "공격투자형"
+        print(user_type)
         response = make_response(render_template(
             'result.html', user_type=user_type))
         response.set_cookie('user_type', user_type)
@@ -111,16 +112,15 @@ def result():
         return "Invalid Access"
 
 
-@app.route('/optimize')
-def optimize():
-    user_type = request.cookies.get('user_type')
-    if user_type == '공격투자형':
-        user_type = '적극투자형'
+@app.route('/selection/<portfolioType>')
+def optimize(portfolioType):
+    portfolio_type = portfolioType
+
     results, schema, assetType = [], {
         'assetType': None, 'weight': 0.0, 'items': []}, []
 
     with engine.connect() as conn:
-        rows = conn.execute(text("SELECT * FROM {}".format(user_type)))
+        rows = conn.execute(text("SELECT * FROM {}".format(portfolio_type)))
         for row in rows.mappings():
             temp = schema.copy()
             temp['items'] = []
@@ -139,7 +139,7 @@ def optimize():
         result['weight'] = sum([item['targetWeight']
                                for item in result['items']])
 
-    return render_template('optimize.html', results=results, user_type=user_type)
+    return render_template('optimize.html', results=results, portfolio_type=portfolio_type)
 
 
 @app.route('/rebalance')
@@ -176,7 +176,13 @@ def rebalance():
 
 @app.route('/selection')
 def selection():
-    return render_template('selection.html')
+    user_type = request.cookies.get('user_type')
+    if user_type == '공격투자형' or user_type == '적극투자형':
+        return render_template('selection.html')
+    elif user_type == '위험중립형':
+        return render_template('selection.html')
+    else:
+        return render_template('selection.html')
 
 
 if __name__ == '__main__':
