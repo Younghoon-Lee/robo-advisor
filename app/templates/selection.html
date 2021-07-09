@@ -10,38 +10,42 @@
                 <p class="title2 bold" align="center">
                     포트폴리오 셀렉션
                 </p>
-                <div class="d-flex flex-column align-items-center marginBottomNone">
-                    <p class="bold">
-                        적극투자형
-                    </p>
-                </div>
-                <div class="d-flex flex-column align-items-center marginBottomTiny">
-                    <canvas id="aggressiveChart" style="height:40vh; width:64vw"></canvas>
-                </div>
-                <div class="d-flex flex-column pageTitleWithDescription marginBottomTiny" style="color: #282828;">
-                    <p class="tendencyDescription" style="text-align: center">
-                        고위험자산 70%, 저위험자산 30%의</br> 포트폴리오예요! 
-                    </p>
-                </div>
-                <div class="d-flex flex-row flex-fill justify-content-center marginBottomSmall">
-                    <button type="button" class="squareButton outline" id="select1" style="width:40%; height:45px;">선택하기</button>
-                </div>
-                <div class="d-flex flex-column align-items-center marginBottomNone">
-                    <p class="bold">
-                        위험중립형
-                    </p>
-                </div>
-                <div class="d-flex flex-column align-items-center marginBottomTiny">
-                    <canvas id="semiChart" style="height:40vh; width:64vw"></canvas>
-                </div>
-                <div class="d-flex flex-column pageTitleWithDescription marginBottomTiny" style="color: #282828;">
-                    <p class="tendencyDescription" style="text-align: center">
-                        고위험자산 55%, 저위험자산 45%의 </br>포트폴리오예요! 
-                    </p>
-                </div>
-                 <div class="d-flex flex-row flex-fill justify-content-center marginBottomSmall">
-                    <button type="button" class="squareButton outline" id="select2" style="width:40%; height:45px;">선택하기</button>
-                </div>
+                {% if user_type == '적극투자형' or user_type == '공격투자형'%}
+                    <div class="d-flex flex-column align-items-center marginBottomNone">
+                        <p class="bold">
+                            적극투자형
+                        </p>
+                    </div>
+                    <div class="d-flex flex-column align-items-center marginBottomTiny">
+                        <canvas id="aggressiveChart" style="height:40vh; width:64vw"></canvas>
+                    </div>
+                    <div class="d-flex flex-column pageTitleWithDescription marginBottomTiny" style="color: #282828;">
+                        <p class="tendencyDescription" style="text-align: center">
+                            고위험자산 70%, 저위험자산 30%의</br> 포트폴리오예요! 
+                        </p>
+                    </div>
+                    <div class="d-flex flex-row flex-fill justify-content-center marginBottomSmall">
+                        <button type="button" class="squareButton outline" id="select1" style="width:40%; height:45px;" onclick="location.href='{{ url_for('optimize' , portfolioType='적극투자형')}}'">선택하기</button>
+                    </div>
+                {% endif %}
+                {% if user_type == '적극투자형' or user_type == '공격투자형' or user_type =='위험중립형'%}
+                    <div class="d-flex flex-column align-items-center marginBottomNone">
+                        <p class="bold">
+                            위험중립형
+                        </p>
+                    </div>
+                    <div class="d-flex flex-column align-items-center marginBottomTiny">
+                        <canvas id="semiChart" style="height:40vh; width:64vw"></canvas>
+                    </div>
+                    <div class="d-flex flex-column pageTitleWithDescription marginBottomTiny" style="color: #282828;">
+                        <p class="tendencyDescription" style="text-align: center">
+                            고위험자산 55%, 저위험자산 45%의 </br>포트폴리오예요! 
+                        </p>
+                    </div>
+                    <div class="d-flex flex-row flex-fill justify-content-center marginBottomSmall">
+                        <button type="button" class="squareButton outline" id="select2" style="width:40%; height:45px;" onclick="location.href='{{ url_for('optimize' , portfolioType='위험중립형')}}'">선택하기</button>
+                    </div>
+                {% endif %}
                 <div class="d-flex flex-column align-items-center marginBottomNone">
                     <p class="bold">
                         안전추구형
@@ -56,7 +60,7 @@
                     </p>
                 </div>
                  <div class="d-flex flex-row flex-fill justify-content-center">
-                    <button type="button" class="squareButton outline" id="select3" style="width:40%; height:45px;">선택하기</button>
+                    <button type="button" class="squareButton outline" id="select3" style="width:40%; height:45px;" onclick="location.href='{{ url_for('optimize' , portfolioType='안전추구형')}}'">선택하기</button>
                 </div>
             </div>
         </div>

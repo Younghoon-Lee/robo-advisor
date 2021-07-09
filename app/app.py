@@ -138,20 +138,22 @@ def optimize(portfolioType):
     for result in results:
         result['weight'] = sum([item['targetWeight']
                                for item in result['items']])
+    response = make_response(render_template(
+        'optimize.html', results=results, portfolio_type=portfolio_type))
+    response.set_cookie('portfolio_type', portfolio_type)
 
-    return render_template('optimize.html', results=results, portfolio_type=portfolio_type)
+    return response
 
 
 @app.route('/rebalance')
 def rebalance():
-    user_type = request.cookies.get('user_type')
-    if user_type == "공격투자형":
-        user_type = "적극투자형"
+    portfolio_type = request.cookies.get('portfolio_type')
+    print(portfolio_type)
     results, schema, assetType = [], {
         'assetType': None, 'weightBefore': 0.0, 'weightAfter': 0.0, 'items': []}, []
 
     with engine.connect() as conn:
-        rows = conn.execute(text("SELECT * FROM {}".format(user_type)))
+        rows = conn.execute(text("SELECT * FROM {}".format(portfolio_type)))
         for row in rows.mappings():
             temp = schema.copy()
             temp['items'] = []
@@ -171,18 +173,13 @@ def rebalance():
                                       for item in result['items']])
         result['weightAfter'] = sum([item['afterWeight']
                                      for item in result['items']])
-    return render_template('rebalance.html', results=results, user_type=user_type)
+    return render_template('rebalance.html', results=results, portfolio_type=portfolio_type)
 
 
 @app.route('/selection')
 def selection():
     user_type = request.cookies.get('user_type')
-    if user_type == '공격투자형' or user_type == '적극투자형':
-        return render_template('selection.html')
-    elif user_type == '위험중립형':
-        return render_template('selection.html')
-    else:
-        return render_template('selection.html')
+    return render_template('selection.html', user_type=user_type)
 
 
 if __name__ == '__main__':
