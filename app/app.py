@@ -46,7 +46,6 @@ def result():
                 continue
             else:
                 total_score += int(request.form.get('options'+str(i)))
-        print(total_score)
 
         # 투자자성향 분류 1단계
         if total_score <= 14:
@@ -59,7 +58,6 @@ def result():
             user_type_level = 2  # 적극투자형
         else:
             user_type_level = 1  # 공격투자형
-        print(user_type_level)
         # 투자자성향 분류 2단계
         investing_period = int(request.form['options9'])
         if investing_period == 1:
@@ -99,7 +97,6 @@ def result():
                 user_type = "위험중립형"
             else:
                 user_type = "공격투자형"
-        print(user_type)
         response = make_response(render_template(
             'result.html', user_type=user_type))
         response.set_cookie('user_type', user_type)
