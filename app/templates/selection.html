@@ -73,36 +73,43 @@
     const LABELS = ['고위험자산','저위험자산']
     let colorArr = ['#F79400','#F3CA43'];
 
-    const aggressiveCTX = document.getElementById("aggressiveChart");
-    const aggressiveChart = new Chart(aggressiveCTX, {
-        type: 'pie',
-        data: {
-            labels: LABELS,
-            datasets: [{
-                label:'aggressive',
-                backgroundColor : colorArr,
-                data: AGRESSIVE
-            }]
-        },
-        options: {
-            responsive : false
-        }
-    })
-    const semiCTX = document.getElementById("semiChart");
-    const semiChart = new Chart(semiCTX, {
-        type: 'pie',
-        data: {
-            labels: LABELS,
-            datasets: [{
-                label:'semi',
-                backgroundColor : colorArr,
-                data: SEMI
-            }]
-        },
-        options: {
-            responsive : false
-        }
-    })
+    if($("canvas").is("#aggressiveChart")){
+        const aggressiveCTX = document.getElementById("aggressiveChart");
+        const aggressiveChart = new Chart(aggressiveCTX, {
+            type: 'pie',
+            data: {
+                labels: LABELS,
+                datasets: [{
+                    label:'aggressive',
+                    backgroundColor : colorArr,
+                    data: AGRESSIVE
+                }]
+            },
+            options: {
+                responsive : false
+            }
+        })
+
+    }
+    
+    if($("canvas").is("#semiChart")){
+        const semiCTX = document.getElementById("semiChart");
+        const semiChart = new Chart(semiCTX, {
+            type: 'pie',
+            data: {
+                labels: LABELS,
+                datasets: [{
+                    label:'semi',
+                    backgroundColor : colorArr,
+                    data: SEMI
+                }]
+            },
+            options: {
+                responsive : false
+            }
+        })
+    }
+    
     const passiveCTX = document.getElementById("passiveChart");
     const passiveChart = new Chart(passiveCTX, {
         type: 'pie',
