@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import time
 from itertools import combinations
@@ -106,7 +107,7 @@ class PortfolioOptimizer:
 
         # create sector mapper
         universe = pd.read_csv(
-            "/Users/tickle/tickle/robo-advisor/universe.csv")
+            os.path.abspath(os.path.dirname(os.path.dirname(__file__)))+"/universe.csv")
         self.universe = universe
         sector_mapper = {}
         for asset in self.asset_basket:
@@ -175,6 +176,9 @@ class PortfolioOptimizer:
 
 
 if __name__ == "__main__":
-    assets = ['069500', '091170', '130730', '229200', '139270', '305720', '228800', '144600', '102110', '139220', '117700',
-              '214980', '130680', '305540', '261220', '139230', '219390', '278540', '292150', '272560', '091180', '228790']
-    test = PortfolioOptimizer(assets)
+    # assets = ['069500', '091170', '130730', '229200', '139270', '305720', '228800', '144600', '102110', '139220', '117700',
+    #           '214980', '130680', '305540', '261220', '139230', '219390', '278540', '292150', '272560', '091180', '228790']
+    # test = PortfolioOptimizer(assets)
+    import os
+    print(os.path.abspath(os.path.dirname(
+        os.path.dirname(__file__)))+'/universe.csv')

@@ -12,7 +12,7 @@ if __name__ != "__main__":
 
 class RebalancingSimulator:
 
-    def __init__(self, p, frac_units=False, starting_cash=700000, trade_cost=0.001, max_thresh=1.1, min_thresh=0.9, back_test=False):
+    def __init__(self, p, frac_units=False, starting_cash=700000, trade_cost=0.005, max_thresh=1.1, min_thresh=0.9, back_test=False):
 
         self.thresh_high = max_thresh
         self.thresh_low = min_thresh
@@ -130,13 +130,14 @@ class RebalancingSimulator:
         self.initialize_portfolio_ = portfolio_init
         self.starting_weights = [(x*y)/self.starting_portfolio_value for x,
                                  y in zip(self.starting_unit_holdings, start_prices)]
-
+        print("")
         print("Initialize your porfolio as follow")
         for init in portfolio_init:
-            print("{}: {}".format(init[0], init[1]))
+            print("{}: {}주".format(init[0], init[1]))
+        print("")
         print("your portfolio weights: ", list(
             zip(self.asset_list, self.starting_weights)))
-
+        print("잔여 금액 :{}".format(self.starting_residual_cash))
         return
 
     def run_simulation(self, plot=False):
@@ -179,7 +180,7 @@ class RebalancingSimulator:
             trade_history.append(trade_count)
             self.rebalancing_counter += 1
 
-        # save backtest dataframe to csv file
+        # save backtest dataframe to csv file (서류 심사 백스테스팅 용도)
         backtest_dict = {'date': date_history, 'portValue': portfolio_values}
         for i in range(len(self.asset_list)):
             backtest_dict[self.asset_list[i]] = [x[i] for x in weight_history]
@@ -325,6 +326,7 @@ class RebalancingSimulator:
                         pass
 
             self.rebalancing_counter = 0
+
             # 현장 심사 db 저장용
             port_val_after = sum(
                 x * y for x, y in zip(unit_holdings, unit_prices)) + self.sim_cash_balance
